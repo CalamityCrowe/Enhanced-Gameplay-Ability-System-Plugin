@@ -24,13 +24,13 @@ public:
 	
 protected:
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Animations")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Animations", meta = (ToolTip = "This will be the montage associated with the ability. If we are having an event fire at a specific point in the montage, we would assign the anim notify in here"))
 	TObjectPtr<UAnimMontage> AbilityMontage;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities", meta = (Tooltip = "baked within the montage of the animation, we will have an anim notify that will send an event to the owning character"))
 	FGameplayTag EventTriggerTag;
 	
-	// this is what we will use to signal that we can extend the ability firther after the montage has started to play
+	// this is what we will use to signal that we can extend the ability further after the montage has started to play
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void MontageStarted(); 
 	

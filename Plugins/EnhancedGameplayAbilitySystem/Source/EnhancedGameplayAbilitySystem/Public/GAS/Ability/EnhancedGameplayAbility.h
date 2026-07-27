@@ -80,16 +80,20 @@ public:
 	
 protected: 
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
+	bool bHasCooldown;
+	
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns", meta =(ToolTip = "This will be the tag we will be using to assign if the ability is on cooldown", EditCondition = "bHasCooldown", EditConditionHides))
 	FGameplayTag CooldownTag; 
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns", meta = (ToolTip = "This will be the tag we will be using to assign for the cooldown duration of the ability", EditCondition = "bHasCooldown", EditConditionHides))
 	FGameplayTag CooldownDurationTag; 
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns", meta = (ToolTip = "This is the value to associate with the cooldown, \n\n so if we set it to 2, we have 2 seconds before we can use the ability again", EditCondition = "bHasCooldown", EditConditionHides))
 	float AbilityCooldown; 
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns", meta = (ToolTip = "The gameplay effect we will be using instead to handle the cooldown instead", EditCondition = "bHasCooldown", EditConditionHides))
 	TSubclassOf<UGameplayEffect> DynamicCooldownEffect; 
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Costs")
@@ -102,17 +106,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
 	EEnhancedActivationPolicy ActivationPolicy;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities", meta = (ToolTip = "We signal to the Ability component to actuvate this straight away"))
 	bool bActivateOnGranted; 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities", meta = (ToolTip = "If we are making a UI system that has abilities displayed on screen,\n\n we set this to true so the UI can check this one value and grab the relevant HUD data from the AbilityHUDData file"))
 	bool bShouldShowInHUD;
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Abilities")
-	bool bShouldCommitOnActivation; 
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|HUD", meta = (EditCondition = "bShouldShowInHUD",EditConditionHides))
 	TObjectPtr<UAbilityHUDData> AbilityHUDData;
 	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Abilities")
+	bool bShouldCommitOnActivation; 
+
 private: 
 	mutable FGameplayTagContainer TempCooldowntags;
 };

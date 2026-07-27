@@ -9,7 +9,10 @@
 // we dont need the constructor in this case, but this does remove the chance of crashing due to sending an event to an invalid component (Ability system component)
 USendGameplayEventAnimNotify::USendGameplayEventAnimNotify()
 {
+#if WITH_EDITOR
 	bShouldFireInEditor = false; 
+#endif
+	
 }
 
 void USendGameplayEventAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,

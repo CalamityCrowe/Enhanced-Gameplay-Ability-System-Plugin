@@ -44,6 +44,7 @@ void UEnhancedGameplayAbility::OnRemoveAbility(const FGameplayAbilityActorInfo* 
 	// I don't implement anything here as this is more a reference of what I should call if I need to remove passive abilities
 }
 
+// we apply the cooldown based on the dynamic approach of only having the one Gameplay Effect
 void UEnhancedGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const
 {
@@ -51,21 +52,14 @@ void UEnhancedGameplayAbility::ApplyCooldown(const FGameplayAbilitySpecHandle Ha
 	UGameplayEffect* CooldownGE = GetCooldownGameplayEffect(); 
 	if (!CooldownGE) return; 
 	
-	// from this we grab the spec handle and check if it is valid. 
-	// we do this as it means that we can alter values based on what we have given the ability. Mainly the cooldown duration and tags
 	FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(CooldownGE->GetClass(),GetAbilityLevel());
 	if (!SpecHandle.IsValid()) return; 
 	
-	// we will then set the cooldown duration of the ability based on the cooldown duration tag and the float value
 	SpecHandle.Data->SetSetByCallerMagnitude(CooldownDurationTag, AbilityCooldown); 
-	
-	// lastly we tell it, this is the tag that we will be using to block the ability when on cooldown
 	SpecHandle.Data.Get()->DynamicGrantedTags.AddTag(CooldownTag); 
 	
 	// we lastly want to apply the spec to the owner of the ability to activate the cooldown for them. 
-	// rider will flag this as an error as we aren't assigning the return value, so we just put in the comment below to tell it to shut up
-	// ReSharper disable once CppExpressionWithoutSideEffects
-	ApplyGameplayEffectSpecToOwner(Handle, ActorInfo,ActivationInfo, SpecHandle); 
+	ApplyGameplayEffectSpecToOwner(Handle, ActorInfo,ActivationInfo, SpecHandle); // this will show a warning to due to not assigning the return value
 }
 
 // for this function, we are grabbing the tags it should be listening for when it is on cooldown
@@ -89,6 +83,7 @@ FGameplayTagContainer* UEnhancedGameplayAbility::GetCooldownTags() const
 	return MutableTags; // we just return it at the end
 }
 
+// since we are doing dynamic allocation of cooldown tags, we don't use the standard Cooldown effect class due to the UE compiler refusing to compile blank effects
 UGameplayEffect* UEnhancedGameplayAbility::GetCooldownGameplayEffect() const
 {
 	return DynamicCooldownEffect? DynamicCooldownEffect->GetDefaultObject<UGameplayEffect>():nullptr;

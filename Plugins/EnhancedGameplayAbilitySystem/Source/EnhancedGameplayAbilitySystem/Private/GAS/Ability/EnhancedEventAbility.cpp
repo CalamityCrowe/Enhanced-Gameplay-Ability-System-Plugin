@@ -15,6 +15,7 @@ void UEnhancedEventAbility::ActivateAbility(const FGameplayAbilitySpecHandle Han
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	
+	// if we want the cost of an ability to be granted straight away along with the cost, we do it here as long as they have a valid cost and it is not on cooldown
 	if (bShouldCommitOnActivation)
 	{
 		if (CheckCooldown(Handle, ActorInfo) == false || CheckCost(Handle, ActorInfo) == false)
@@ -36,6 +37,7 @@ void UEnhancedEventAbility::ActivateAbility(const FGameplayAbilitySpecHandle Han
 		}	
 	}
 	
+	// we will play the montage using an ability task, as this will handle all the clean-up correctly in the ability due to the delegates along with correct multiplayer setups
 	UAbilityTask_PlayMontageAndWait* PlayMontageAndWait = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(
 		this,
 		FName(""),

@@ -5,15 +5,15 @@
 
 // plugin
 #include "GAS/EnhancedAbilitySystemComponent.h"
+#include "GAS/Attributes/EnhancedAttributeSet.h"
 #include "Player/EnhancedPlayerState.h"
+
 
 // engine
 #include "InputActionValue.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/KismetMaterialLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -82,7 +82,7 @@ void AThirdPersonPlayerCharacter::InputAbilityInputTagPressed(FGameplayTag Input
 
 void AThirdPersonPlayerCharacter::InputAbilityInputTagReleased(FGameplayTag InputTag)
 {
-	InputAbilityInputTagReleased(InputTag);
+	ASC->AbilityInputTagReleased(InputTag);
 }
 
 void AThirdPersonPlayerCharacter::Die()

@@ -6,6 +6,7 @@
 #include "Characters/CharacterBase.h"
 #include "ThirdPersonPlayerCharacter.generated.h"
 
+class UCameraComponent;
 class USpringArmComponent;
 class UEnhancedInputConfig;
 
