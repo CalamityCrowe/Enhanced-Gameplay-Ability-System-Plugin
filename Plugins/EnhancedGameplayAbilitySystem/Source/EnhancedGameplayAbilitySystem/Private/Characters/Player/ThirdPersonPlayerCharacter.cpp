@@ -24,7 +24,7 @@ AThirdPersonPlayerCharacter::AThirdPersonPlayerCharacter()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->SetWorldLocation(FVector(0,0,8.492f)); 
 	CameraBoom->SocketOffset = FVector(0,40.f, 60.f); 
-	CameraBoom->TargetArmLength = 400.f; 
+	CameraBoom->TargetArmLength = 250.f; 
 	CameraBoom->bUsePawnControlRotation = true; 
 	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera")); 

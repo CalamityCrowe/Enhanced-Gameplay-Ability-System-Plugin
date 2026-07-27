@@ -44,7 +44,7 @@ protected:
 	
 	virtual void OnRep_PlayerState() override;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Input System|Inputs", meta = (ToolTip = "we add all the mapping context that we will be using in game here\n\nwe would do this to specific inputs seperate, like ability based ones, pause or generic character movements"))
+	UPROPERTY(EditDefaultsOnly, Category = "Input System|Inputs", meta = (ToolTip = "we add all the mapping context that we will be using in game here\nThe Key of the map is a Inputmapping context and the value is the priority for the mapping context\nwe would do this to specific inputs seperate, like ability based ones, pause or generic character movements"))
 	TMap<TObjectPtr<UInputMappingContext>, int32> MappingContexts;
 	
 	// if we are doing paused inputs, etc. then this is where we would handle that here by setting up all the relevant HUD classes to retrieve along with the behaviour of what we want to happen

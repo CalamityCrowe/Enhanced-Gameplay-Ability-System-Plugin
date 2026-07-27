@@ -3,7 +3,7 @@
 	"Version": 1,
 	"VersionName": "1.0",
 	"FriendlyName": "EnhancedGameplayAbilitySystem",
-	"Description": "This is my own framework for starting up a project that will further expand the Gameplay Ability System. ",
+	"Description": "This is a framework that has the basics for a GAS ready system for Attributes, Abilities, Characters and more",
 	"Category": "Other",
 	"CreatedBy": "kyrie",
 	"CreatedByURL": "",

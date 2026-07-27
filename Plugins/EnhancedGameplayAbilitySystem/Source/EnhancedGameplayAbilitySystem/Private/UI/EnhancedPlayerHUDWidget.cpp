@@ -3,6 +3,11 @@
 
 #include "UI/EnhancedPlayerHUDWidget.h"
 
+UEnhancedPlayerHUDWidget::UEnhancedPlayerHUDWidget(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
+{
+	
+}
+
 void UEnhancedPlayerHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
