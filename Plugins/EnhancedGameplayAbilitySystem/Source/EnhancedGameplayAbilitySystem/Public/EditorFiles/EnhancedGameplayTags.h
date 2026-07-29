@@ -22,8 +22,9 @@ public:
 	// we would also do ability ones here if we wanted to
 
 	// blocking movement tags
-	FGameplayTag Gameplay_Death; 
-	
+	FGameplayTag Gameplay_Death;
+	FGameplayTag Gameplay_Aim;
+	FGameplayTag Gameplay_Stun;
 	
 protected:
 	

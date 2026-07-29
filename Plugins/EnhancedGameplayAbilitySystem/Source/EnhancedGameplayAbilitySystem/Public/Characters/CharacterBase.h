@@ -12,6 +12,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHitReactDelegate, EHitReactDirection, Direction); 
 
+
 class UEnhancedAbilitySystemComponent; 
 class UEnhancedAttributeSet; 
 
@@ -26,6 +27,8 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Character", meta = (ToolTip = "This will be used to bind a delegate within the animation blueprint on how we should handle hit reactions. We don't really need to use this if we dont have hit reacts, but this will fire on all damage events either way"))
 	FCharacterHitReactDelegate CharacterHitReactDelegate;
+	
+
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	

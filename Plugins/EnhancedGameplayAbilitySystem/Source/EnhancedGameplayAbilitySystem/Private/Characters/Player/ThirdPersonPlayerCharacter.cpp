@@ -12,7 +12,9 @@
 // engine
 #include "InputActionValue.h"
 #include "Camera/CameraComponent.h"
+#include "EditorFiles/EnhancedGameplayTags.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Input/GASEnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -42,8 +44,26 @@ void AThirdPersonPlayerCharacter::BeginPlay()
 void AThirdPersonPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	UGASEnhancedInputComponent* GASInputComponent = Cast<UGASEnhancedInputComponent>(PlayerInputComponent);
+	check(GASInputComponent);
+	
+	const FEnhancedGameplayTags& GameplayTags = FEnhancedGameplayTags::Get();
+	TArray<uint32> BindHandles; 
+	
+	// from the input config we will grab all the ability specific inputs here, then bind the pressed and release actions
+	// how the ability behaves is handled in the background by the ASC and will be based on how the abilities input mode
+	GASInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::InputAbilityInputTagPressed, &ThisClass::InputAbilityInputTagReleased, BindHandles); 
+	
+	// for the native inputs, this is what will be defined by the player specifically. Logically this doesn't make sense to be an ability as it's generic functionality like player movement
+	// but this does mean we can block these using the tag "NativeInput" in the specific abilities
+	GASInputComponent->BindNativeAction(InputConfig, GameplayTags.Input_Move, ETriggerEvent::Triggered, this, &ThisClass::Move);
+	GASInputComponent->BindNativeAction(InputConfig, GameplayTags.Input_Aim, ETriggerEvent::Triggered, this, &ThisClass::Look);
+	GASInputComponent->BindNativeAction(InputConfig, GameplayTags.Input_Jump, ETriggerEvent::Started, this, &ThisClass::Jump); 
+	GASInputComponent->BindNativeAction(InputConfig, GameplayTags.Input_Jump, ETriggerEvent::Canceled, this, &ThisClass::StopJumping); 
 }
 
+// in the possessed by functionality, we can grab the player state and then assign the ASC correctly here for the player to have a reference to along with the attributes
 void AThirdPersonPlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
@@ -56,6 +76,7 @@ void AThirdPersonPlayerCharacter::PossessedBy(AController* NewController)
 	
 	AttributeSet = PS->GetAttributeSet();  
 	
+	// in the ability set, we get all the 
 	if (AbilitySet)
 	{
 		AbilitySet->GiveToAbilitySystem(ASC.Get(),&GrantedAbilityHandles, this); 
@@ -118,6 +139,6 @@ void AThirdPersonPlayerCharacter::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxis = Value.Get<FVector2D>();
 	AddControllerYawInput(LookAxis.X); 
-	AddControllerYawInput(LookAxis.Y);
+	AddControllerPitchInput(LookAxis.Y);
 }
 
