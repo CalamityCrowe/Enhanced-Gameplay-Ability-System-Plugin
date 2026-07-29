@@ -18,6 +18,11 @@ void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	AddTag(Input_Jump, "NativeInput.Jump", "Jump Inputs");
 	
 	AddTag(Gameplay_Death, "State.Dead", "Dead");
+	AddTag(Gameplay_Stun, "State.Stun", "Stun");
+	AddTag(Gameplay_Aim, "State.Aim", "Aim"); // not sure if I want this as a state yet or an ability 
+	
+	AddTag(Event_ComboStart, "Event.Combo.Start", "Combo Start"); 
+	
 	
 }
 

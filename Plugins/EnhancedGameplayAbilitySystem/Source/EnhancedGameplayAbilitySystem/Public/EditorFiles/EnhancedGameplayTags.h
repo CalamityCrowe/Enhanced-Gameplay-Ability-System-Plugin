@@ -19,12 +19,15 @@ public:
 	FGameplayTag Input_Aim;
 	FGameplayTag Input_Jump;
 	
-	// we would also do ability ones here if we wanted to
-
-	// blocking movement tags
+	
+	// gameplay related Tags
 	FGameplayTag Gameplay_Death;
 	FGameplayTag Gameplay_Aim;
 	FGameplayTag Gameplay_Stun;
+	
+	// Event based tags
+	FGameplayTag Event_ComboStart;
+	FGameplayTag Event_ComboEnd;
 	
 protected:
 	
