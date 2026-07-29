@@ -25,6 +25,8 @@ public:
 	FGameplayTag Gameplay_Aim;
 	FGameplayTag Gameplay_Stun;
 	
+	FGameplayTag Gameplay_Ability;
+	
 	// Event based tags
 	FGameplayTag Event_ComboStart;
 	FGameplayTag Event_ComboEnd;
