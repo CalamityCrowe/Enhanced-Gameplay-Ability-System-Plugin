@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/BTask_ActivateAbilityByTag.h"
+#include "AI/BehaviourTasks/BTask_ActivateAbilityByTag.h"
 
 //engine
 #include "AbilitySystemComponent.h"

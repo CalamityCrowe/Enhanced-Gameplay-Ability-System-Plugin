@@ -10,7 +10,8 @@ class UCameraComponent;
 class USpringArmComponent;
 class UEnhancedInputConfig;
 
-UCLASS()
+// we dont want to make this visible in the editor
+UCLASS(Abstract, HideDropdown)
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API AThirdPersonPlayerCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
