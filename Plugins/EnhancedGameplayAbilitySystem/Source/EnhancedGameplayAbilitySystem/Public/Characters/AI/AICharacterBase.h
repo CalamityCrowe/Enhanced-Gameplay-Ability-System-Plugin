@@ -16,9 +16,19 @@ public:
 	AAICharacterBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-
+	
+	virtual void PossessedBy(AController* NewController) override;
+	
+	virtual void HealthUpdated(const FOnAttributeChangeData& Data); 
+	
+	virtual void Die() override;
+	
+	virtual void FinishDying() override;
+private: 
+	UPROPERTY()
+	UEnhancedAttributeSet* HardRefAttributeSet; 
+	
+	UPROPERTY()
+	UEnhancedAbilitySystemComponent* HardRefASC; 
 };

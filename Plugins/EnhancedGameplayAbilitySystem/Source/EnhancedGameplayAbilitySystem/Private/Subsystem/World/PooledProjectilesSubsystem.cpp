@@ -1,0 +1,62 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Subsystem/World/PooledProjectilesSubsystem.h"
+
+#include "Actors/ObjectPool/PooledActorBase.h"
+
+void UPooledProjectilesSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+	PooledProjectiles.Reset(); 
+	InitializePool(); 
+}
+
+void UPooledProjectilesSubsystem::Deinitialize()
+{
+	Super::Deinitialize();
+}
+
+APooledActorBase* UPooledProjectilesSubsystem::SpawnFromPool(const FTransform& SpawnTransform)
+{
+	// I wont set in use here, as we might need to do something specific with the projectile when we are using it
+	if (APooledActorBase* AvailableActor = FindFirstAvailableProjectile())
+	{
+		AvailableActor->SetActorTransform(SpawnTransform);
+		//AvailableActor->SetInUse(true);
+		return AvailableActor;
+	}
+	return nullptr;
+}
+
+APooledActorBase* UPooledProjectilesSubsystem::FindFirstAvailableProjectile()
+{
+	for (APooledActorBase* PooledActor : PooledProjectiles)
+	{
+		if (PooledActor->IsInUse() == false)
+		{
+			return PooledActor; 
+		}
+	}
+	return nullptr;
+}
+
+void UPooledProjectilesSubsystem::InitializePool()
+{
+	if (!PooledProjectileClass)
+	{
+#if WITH_EDITOR
+	UE_LOG(LogTemp, Error, TEXT("Pooled actor class is null in the pooled projectile subsystem"))
+#endif
+		return; 
+	}
+	for (int i = 0; i < PoolSize; ++i)
+	{
+		FActorSpawnParameters SpawnParams;
+		if (APooledActorBase* NewActor = GetWorld()->SpawnActor<APooledActorBase>(PooledProjectileClass, FVector::ZeroVector,FRotator::ZeroRotator, SpawnParams))
+		{
+			NewActor->SetInUse(false); 
+			PooledProjectiles.AddUnique(NewActor);
+		}
+	}
+}
