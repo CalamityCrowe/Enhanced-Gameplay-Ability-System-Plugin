@@ -23,8 +23,13 @@ void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	
 	AddTag(Gameplay_Ability, "GameplayAbility", "Abilities");
 	
+	AddTag(Event_AbilitiesChanged,"Event.Abilities.Changed", "Abilities changed event");
+	AddTag(Event_MontageTriggered, "Event.Montage.Triggered", "Montage triggered");
 	AddTag(Event_ComboStart, "Event.Combo.Start", "Combo Start"); 
 	AddTag(Event_ComboEnd, "Event.Combo.End", "Combo End");
+	AddTag(Event_ComboInput, "Event.Combo.Input", "Combo Input");
+	AddTag(Event_HitScanStart, "Event.Hitscan.Start", "Hit scan start");
+	AddTag(Event_HitScanEnd, "Event.Hitscan.End", "Hit scan end");
 	
 }
 

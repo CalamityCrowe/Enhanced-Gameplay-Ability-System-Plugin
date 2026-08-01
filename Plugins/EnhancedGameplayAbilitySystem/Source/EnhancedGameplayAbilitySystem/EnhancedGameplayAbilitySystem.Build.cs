@@ -41,7 +41,8 @@ public class EnhancedGameplayAbilitySystem : ModuleRules
 				"GameplayTags",
 				"GameplayTasks",
 				"UMG", 
-				"AIModule"
+				"AIModule", 
+				"DeveloperSettings"
 			}
 			);
 		

@@ -22,6 +22,8 @@ public:
 	
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	
+	virtual void PostInitProperties() override;
+	
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Animations", meta = (ToolTip = "This will be the montage associated with the ability. If we are having an event fire at a specific point in the montage, we would assign the anim notify in here"))

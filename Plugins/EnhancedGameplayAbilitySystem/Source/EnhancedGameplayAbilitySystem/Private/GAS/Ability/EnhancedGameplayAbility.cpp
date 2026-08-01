@@ -9,12 +9,17 @@
 UEnhancedGameplayAbility::UEnhancedGameplayAbility():ActivationPolicy(EEnhancedActivationPolicy::OnInputTriggered),bActivateOnGranted(false)
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
+
+void UEnhancedGameplayAbility::PostInitProperties()
+{
+	Super::PostInitProperties();
 	FGameplayTagContainer AbilityContainer;
 	AbilityContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("GameplayAbility"))); 
 	SetAssetTags(AbilityContainer); 
 	
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag("State.Dead",false)); 
-	
+	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag("State.Stun",false));
 }
 
 ACharacter* UEnhancedGameplayAbility::GetCharacterFromActorInfo() const

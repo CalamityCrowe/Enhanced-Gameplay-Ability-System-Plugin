@@ -28,8 +28,14 @@ public:
 	FGameplayTag Gameplay_Ability;
 	
 	// Event based tags
+	FGameplayTag Event_AbilitiesChanged;
+	FGameplayTag Event_MontageTriggered;
 	FGameplayTag Event_ComboStart;
 	FGameplayTag Event_ComboEnd;
+	FGameplayTag Event_ComboInput;
+	
+	FGameplayTag Event_HitScanStart;
+	FGameplayTag Event_HitScanEnd;
 	
 protected:
 	

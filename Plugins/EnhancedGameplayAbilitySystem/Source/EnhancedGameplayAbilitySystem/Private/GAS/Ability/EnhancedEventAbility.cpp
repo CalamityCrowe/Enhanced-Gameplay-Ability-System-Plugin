@@ -64,6 +64,13 @@ void UEnhancedEventAbility::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
+void UEnhancedEventAbility::PostInitProperties()
+{
+	Super::PostInitProperties();
+	
+	EventTriggerTag = FGameplayTag::RequestGameplayTag(FName("Event.Montage.Triggered"), false); 
+}
+
 void UEnhancedEventAbility::MontageStarted_Implementation()
 {
 	// same as the OnEventTriggered. We won't implement anything here, but we can 

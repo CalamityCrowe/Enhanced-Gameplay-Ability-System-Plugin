@@ -56,7 +56,12 @@ class ENHANCEDGAMEPLAYABILITYSYSTEM_API UEnhancedGameplayAbility : public UGamep
 public: 
 	
 	UEnhancedGameplayAbility(); 
+	
+	virtual void PostInitProperties() override;
+	
 	EEnhancedActivationPolicy GetActivationPolicy() const{return ActivationPolicy; };
+	
+	
 	
 	UFUNCTION(BlueprintCallable,Category = "GAS|Ability")
 	ACharacter* GetCharacterFromActorInfo() const; 

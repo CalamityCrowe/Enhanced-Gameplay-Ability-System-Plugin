@@ -3,13 +3,21 @@
 
 #include "Subsystem/World/PooledProjectilesSubsystem.h"
 
+// plugin
 #include "Actors/ObjectPool/PooledActorBase.h"
+#include "EditorFiles/PooledProjectileSettings.h"
 
 void UPooledProjectilesSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 	PooledProjectiles.Reset(); 
-	InitializePool(); 
+	
+	if (const UPooledProjectileSettings* Settings = GetDefault<UPooledProjectileSettings>())
+	{
+		PooledProjectileClass = Settings->GetProjectileActorClass(); 
+		PoolSize = Settings->GetPoolSize();
+		InitializePool(); 
+	}
 }
 
 void UPooledProjectilesSubsystem::Deinitialize()
