@@ -38,7 +38,6 @@ AThirdPersonPlayerCharacter::AThirdPersonPlayerCharacter()
 void AThirdPersonPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AThirdPersonPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

@@ -24,7 +24,7 @@ public class EnhancedGameplayAbilitySystem : ModuleRules
 			new string[]
 			{
 				"Core", 
-				"GameplayTags",
+				"GameplayTags", "GameplayAbilities",
 			}
 			);
 			

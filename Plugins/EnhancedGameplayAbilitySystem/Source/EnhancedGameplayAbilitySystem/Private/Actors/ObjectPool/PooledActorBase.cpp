@@ -14,7 +14,7 @@ void APooledActorBase::BeginPlay()
 	Super::BeginPlay();
 	SetInUse(false); 
 }
-// we do all the standard can we see it and does the collisios work atm for the actor here
+// we do all the standard can we see it and does the collisions work atm for the actor here
 void APooledActorBase::SetInUse(bool InUse)
 {
 	bInUse = InUse;

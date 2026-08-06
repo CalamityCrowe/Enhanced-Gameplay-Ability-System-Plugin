@@ -15,7 +15,7 @@ void UEnhancedGameplayAbility::PostInitProperties()
 {
 	Super::PostInitProperties();
 	FGameplayTagContainer AbilityContainer;
-	AbilityContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("GameplayAbility"))); 
+	AbilityContainer.AddTag(FGameplayTag::RequestGameplayTag(TEXT("GameplayAbility"), false)); 
 	SetAssetTags(AbilityContainer); 
 	
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag("State.Dead",false)); 

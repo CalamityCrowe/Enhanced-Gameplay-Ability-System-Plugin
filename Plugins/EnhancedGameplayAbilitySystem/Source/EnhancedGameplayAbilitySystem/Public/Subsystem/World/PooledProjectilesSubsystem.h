@@ -11,7 +11,7 @@
  */
 
 
-class APooledActorBase;
+class APooledProjectile;
 
 UCLASS()
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UPooledProjectilesSubsystem : public UWorldSubsystem
@@ -24,23 +24,23 @@ public:
 	
 	virtual void Deinitialize() override;
 	
-	APooledActorBase* SpawnFromPool(const FTransform& SpawnTransform); 
+	APooledProjectile* SpawnFromPool(const FTransform& SpawnTransform); 
 	
 protected: 
 	
-	APooledActorBase* FindFirstAvailableProjectile();
+	APooledProjectile* FindFirstAvailableProjectile();
 	
 private:
 	
 	void InitializePool();
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Pooled Projectiles", meta = (AllowPrivateAccess = true))
-	TSubclassOf<APooledActorBase> PooledProjectileClass;
+	TSubclassOf<APooledProjectile> PooledProjectileClass;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Pooled Projectiles", meta = (AllowPrivateAccess = true, UIMin = 0, ClampMin = 0))
 	int32 PoolSize = 0;
 	
 	UPROPERTY()
-	TArray<TObjectPtr<APooledActorBase>> PooledProjectiles;
+	TArray<TObjectPtr<APooledProjectile>> PooledProjectiles;
 	
 };

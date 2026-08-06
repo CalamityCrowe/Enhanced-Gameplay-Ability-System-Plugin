@@ -5,6 +5,7 @@
 
 // plugin
 #include "Actors/ObjectPool/PooledActorBase.h"
+#include "Actors/ObjectPool/PooledProjectile.h"
 #include "EditorFiles/PooledProjectileSettings.h"
 
 void UPooledProjectilesSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -25,10 +26,10 @@ void UPooledProjectilesSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
-APooledActorBase* UPooledProjectilesSubsystem::SpawnFromPool(const FTransform& SpawnTransform)
+APooledProjectile* UPooledProjectilesSubsystem::SpawnFromPool(const FTransform& SpawnTransform)
 {
 	// I wont set in use here, as we might need to do something specific with the projectile when we are using it
-	if (APooledActorBase* AvailableActor = FindFirstAvailableProjectile())
+	if (APooledProjectile* AvailableActor = FindFirstAvailableProjectile())
 	{
 		AvailableActor->SetActorTransform(SpawnTransform);
 		//AvailableActor->SetInUse(true);
@@ -37,9 +38,9 @@ APooledActorBase* UPooledProjectilesSubsystem::SpawnFromPool(const FTransform& S
 	return nullptr;
 }
 
-APooledActorBase* UPooledProjectilesSubsystem::FindFirstAvailableProjectile()
+APooledProjectile* UPooledProjectilesSubsystem::FindFirstAvailableProjectile()
 {
-	for (APooledActorBase* PooledActor : PooledProjectiles)
+	for (APooledProjectile* PooledActor : PooledProjectiles)
 	{
 		if (PooledActor->IsInUse() == false)
 		{
@@ -61,7 +62,7 @@ void UPooledProjectilesSubsystem::InitializePool()
 	for (int i = 0; i < PoolSize; ++i)
 	{
 		FActorSpawnParameters SpawnParams;
-		if (APooledActorBase* NewActor = GetWorld()->SpawnActor<APooledActorBase>(PooledProjectileClass, FVector::ZeroVector,FRotator::ZeroRotator, SpawnParams))
+		if (APooledProjectile* NewActor = GetWorld()->SpawnActor<APooledProjectile>(PooledProjectileClass, FVector::ZeroVector,FRotator::ZeroRotator, SpawnParams))
 		{
 			NewActor->SetInUse(false); 
 			PooledProjectiles.AddUnique(NewActor);
