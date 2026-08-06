@@ -4,21 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "Characters/CharacterBase.h"
-#include "ThirdPersonPlayerCharacter.generated.h"
+#include "EnhancedPlayerCharacter.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
 class UEnhancedInputConfig;
 
+// since this is a reference to how we might want to implement a player character, this one is a setup for third person characters instead
+// if we were doing a first person, we would give another mesh here that hides itself to other players and is visible to the owning player 
+// so the hands are in the correct place. would look at the first-person shooter sample project for a reference
+
 // we dont want to make this visible in the editor
 UCLASS(Abstract, HideDropdown)
-class ENHANCEDGAMEPLAYABILITYSYSTEM_API AThirdPersonPlayerCharacter : public ACharacterBase
+class ENHANCEDGAMEPLAYABILITYSYSTEM_API AEnhancedPlayerCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AThirdPersonPlayerCharacter();
+	AEnhancedPlayerCharacter();
 
 	
 	virtual void Die() override;

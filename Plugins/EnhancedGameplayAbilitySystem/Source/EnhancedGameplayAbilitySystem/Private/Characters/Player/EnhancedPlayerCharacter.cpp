@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Characters/Player/ThirdPersonPlayerCharacter.h"
+#include "Characters/Player/EnhancedPlayerCharacter.h"
 
 // plugin
 #include "GAS/EnhancedAbilitySystemComponent.h"
@@ -19,7 +19,7 @@
 
 
 // Sets default values
-AThirdPersonPlayerCharacter::AThirdPersonPlayerCharacter()
+AEnhancedPlayerCharacter::AEnhancedPlayerCharacter()
 {
 	// this is the general setup that we will be using for the third person character and will be what the first person character will inherit from
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
@@ -35,12 +35,12 @@ AThirdPersonPlayerCharacter::AThirdPersonPlayerCharacter()
 	bUseControllerRotationYaw = false;
 }
 
-void AThirdPersonPlayerCharacter::BeginPlay()
+void AEnhancedPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void AThirdPersonPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AEnhancedPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
@@ -63,7 +63,7 @@ void AThirdPersonPlayerCharacter::SetupPlayerInputComponent(UInputComponent* Pla
 }
 
 // in the possessed by functionality, we can grab the player state and then assign the ASC correctly here for the player to have a reference to along with the attributes
-void AThirdPersonPlayerCharacter::PossessedBy(AController* NewController)
+void AEnhancedPlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	
@@ -85,7 +85,7 @@ void AThirdPersonPlayerCharacter::PossessedBy(AController* NewController)
 }
 
 // in this instance,
-void AThirdPersonPlayerCharacter::SendAbilitiesChangedEvent()
+void AEnhancedPlayerCharacter::SendAbilitiesChangedEvent()
 {
 	FGameplayEventData EventData; 
 	EventData.EventTag = FGameplayTag::RequestGameplayTag(FName("Event.Abilities.Changed")); 
@@ -95,17 +95,17 @@ void AThirdPersonPlayerCharacter::SendAbilitiesChangedEvent()
 	SendGameplayEventToSelf(EventData); 
 }
 
-void AThirdPersonPlayerCharacter::InputAbilityInputTagPressed(FGameplayTag InputTag)
+void AEnhancedPlayerCharacter::InputAbilityInputTagPressed(FGameplayTag InputTag)
 {
 	ASC->AbilityInputTagPressed(InputTag);
 }
 
-void AThirdPersonPlayerCharacter::InputAbilityInputTagReleased(FGameplayTag InputTag)
+void AEnhancedPlayerCharacter::InputAbilityInputTagReleased(FGameplayTag InputTag)
 {
 	ASC->AbilityInputTagReleased(InputTag);
 }
 
-void AThirdPersonPlayerCharacter::Die()
+void AEnhancedPlayerCharacter::Die()
 {
 	Super::Die();
 	// when the player dies, we want to grab the controller and disable the input for them
@@ -115,13 +115,13 @@ void AThirdPersonPlayerCharacter::Die()
 	}
 }
 
-void AThirdPersonPlayerCharacter::FinishDying()
+void AEnhancedPlayerCharacter::FinishDying()
 {
 	Super::FinishDying();
 }
 
 // gets the relevant movement direction from the 
-void AThirdPersonPlayerCharacter::Move(const FInputActionValue& Value)
+void AEnhancedPlayerCharacter::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementAxis = Value.Get<FVector2D>(); 
 	FRotator ControlRotation = GetControlRotation();
@@ -134,7 +134,7 @@ void AThirdPersonPlayerCharacter::Move(const FInputActionValue& Value)
 }
 
 // the standard look input you would use
-void AThirdPersonPlayerCharacter::Look(const FInputActionValue& Value)
+void AEnhancedPlayerCharacter::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxis = Value.Get<FVector2D>();
 	AddControllerYawInput(LookAxis.X); 

@@ -19,7 +19,7 @@ AAICharacterBase::AAICharacterBase()
 
 void AAICharacterBase::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay(); // this is the standard setup for granting abilities to AI enemies, we could do this on posses instead, so it's only when they get a controller
 	if (!ASC.IsValid() || !AbilitySet)return; 
 	
 	ASC->InitAbilityActorInfo(this, this); 
@@ -39,7 +39,7 @@ void AAICharacterBase::HealthUpdated(const FOnAttributeChangeData& Data)
 {
 	float NewHealth = Data.NewValue; 
 	
-	// if we are doing UI stuff here to signal UI, we could pass the health here
+	// if we are doing UI stuff,we can pass the health to signal that 
 	
 	if (!IsAlive()|| !ASC->HasMatchingGameplayTag(DeadTag))
 	{
