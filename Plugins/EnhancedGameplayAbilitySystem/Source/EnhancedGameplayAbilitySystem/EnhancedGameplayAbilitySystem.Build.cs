@@ -42,7 +42,8 @@ public class EnhancedGameplayAbilitySystem : ModuleRules
 				"GameplayTasks",
 				"UMG", 
 				"AIModule", 
-				"DeveloperSettings"
+				"DeveloperSettings", 
+				"Niagara"
 			}
 			);
 		
