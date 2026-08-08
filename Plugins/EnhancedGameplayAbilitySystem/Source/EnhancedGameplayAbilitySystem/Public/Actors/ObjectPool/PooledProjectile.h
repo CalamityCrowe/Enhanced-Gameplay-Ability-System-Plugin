@@ -26,8 +26,12 @@ public:
 	
 	void SetProjectileDamage(const FGameplayEffectSpecHandle& InDamageEffect); 
 	
+	virtual void SetInUse(bool InUse) override;
+	
 protected:
 	virtual void BeginPlay() override;
+	
+
 	
 private: 
 	
@@ -45,5 +49,8 @@ private:
 	
 	UFUNCTION()
 	void OnComponentHit(UPrimitiveComponent* HitComponent, AActor*  OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
+	
+	FVector DefaultVelocity = FVector::ZeroVector;
 	
 };

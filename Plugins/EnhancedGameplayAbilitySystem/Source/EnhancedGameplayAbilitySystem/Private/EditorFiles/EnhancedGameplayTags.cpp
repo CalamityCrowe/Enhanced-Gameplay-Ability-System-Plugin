@@ -21,6 +21,7 @@ void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	AddTag(Gameplay_Stun, "State.Stun", "Stun");
 	AddTag(Gameplay_Aim, "State.Aim", "Aim"); // not sure if I want this as a state yet or an ability 
 	
+	// will look at loading these in via a file instead later for the non input tags
 	AddTag(Gameplay_Ability, "GameplayAbility", "Abilities");
 	
 	AddTag(Event_AbilitiesChanged,"Event.Abilities.Changed", "Abilities changed event");
@@ -30,6 +31,10 @@ void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	AddTag(Event_ComboInput, "Event.Combo.Input", "Combo Input");
 	AddTag(Event_HitScanStart, "Event.Hitscan.Start", "Hit scan start");
 	AddTag(Event_HitScanEnd, "Event.Hitscan.End", "Hit scan end");
+	
+	AddTag(Data_Damage, "Data.Damage", "Damage");
+	AddTag(Data_Heal, "Data.Heal", "Heal");
+	
 	
 }
 

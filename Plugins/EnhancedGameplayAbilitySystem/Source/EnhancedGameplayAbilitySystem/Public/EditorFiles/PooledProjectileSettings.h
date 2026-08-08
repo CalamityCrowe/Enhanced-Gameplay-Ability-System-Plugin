@@ -6,7 +6,8 @@
 #include "Engine/DeveloperSettings.h"
 #include "PooledProjectileSettings.generated.h"
 
-class APooledActorBase;
+class APooledProjectile;
+
 /**
  * 
  */
@@ -23,12 +24,12 @@ public:
 #endif
 	
 	UFUNCTION(BlueprintPure, Category= "Pooled Projectiles")
-	TSubclassOf<APooledActorBase> GetProjectileActorClass() const;
+	TSubclassOf<APooledProjectile> GetProjectileActorClass() const;
 	UFUNCTION(BlueprintPure, Category = "Pooled Projectiles")
 	int32 GetPoolSize() const; 
 protected: 
 	UPROPERTY(Config, EditAnywhere)
-	TSubclassOf<APooledActorBase> ProjectileClass;
+	TSubclassOf<APooledProjectile> ProjectileClass;
 	UPROPERTY(Config, EditAnywhere)
 	int32 PoolSize = 0;
 	

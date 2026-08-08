@@ -69,3 +69,8 @@ void UPooledProjectilesSubsystem::InitializePool()
 		}
 	}
 }
+
+bool UPooledProjectilesSubsystem::DoesSupportWorldType(const EWorldType::Type WorldType) const
+{
+	return WorldType == EWorldType::PIE || WorldType == EWorldType::Game;
+}

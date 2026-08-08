@@ -2,7 +2,7 @@
 #include "EditorFiles/PooledProjectileSettings.h"
 
 //plugin 
-#include "Actors/ObjectPool/PooledActorBase.h"
+#include "Actors/ObjectPool/PooledProjectile.h"
 UPooledProjectileSettings::UPooledProjectileSettings(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
 {
 	// this will be the main setting for where it is stored on the left hand side
@@ -24,7 +24,7 @@ FText UPooledProjectileSettings::GetSectionDescription() const
 }
 #endif
 
-TSubclassOf<APooledActorBase> UPooledProjectileSettings::GetProjectileActorClass() const
+TSubclassOf<APooledProjectile> UPooledProjectileSettings::GetProjectileActorClass() const
 {
 	if (ProjectileClass)return ProjectileClass; 
 	return nullptr;

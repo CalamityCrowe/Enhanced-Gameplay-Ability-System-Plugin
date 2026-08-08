@@ -23,7 +23,7 @@ AEffectActorBase::AEffectActorBase(): EffectClass(nullptr), EffectTag(FGameplayT
 
 void AEffectActorBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (ActiveEffects.Contains(OtherActor))return;
+	if (ActiveEffects.Contains(OtherActor) || !EffectClass)return;
 	
 	if (UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(OtherActor))
 	{

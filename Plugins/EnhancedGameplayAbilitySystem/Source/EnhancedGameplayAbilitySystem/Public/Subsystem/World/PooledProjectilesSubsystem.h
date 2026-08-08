@@ -43,4 +43,6 @@ private:
 	UPROPERTY()
 	TArray<TObjectPtr<APooledProjectile>> PooledProjectiles;
 	
+	
+	virtual bool DoesSupportWorldType(const EWorldType::Type WorldType) const override;
 };

@@ -37,6 +37,8 @@ public:
 	FGameplayTag Event_HitScanStart;
 	FGameplayTag Event_HitScanEnd;
 	
+	
+	
 protected:
 	
 	virtual void AddAllTags(UGameplayTagsManager& Manager); 
@@ -44,4 +46,7 @@ protected:
 	
 private: 
 	static FEnhancedGameplayTags GameplayTags; 
+	
+	FGameplayTag Data_Damage; 
+	FGameplayTag Data_Heal;
 };
