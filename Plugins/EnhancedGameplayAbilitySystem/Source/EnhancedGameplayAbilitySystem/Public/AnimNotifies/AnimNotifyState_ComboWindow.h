@@ -28,6 +28,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability", meta = (Categories = "Event"))
 	FGameplayTag ComboStartTag; 
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability", meta = (Categories = "Event"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability", meta = (Categories = "Event"))
 	FGameplayTag ComboEndTag;
 };

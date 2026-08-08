@@ -31,9 +31,9 @@ protected:
 	FGameplayTag HitScanEndTag;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities|Hit Scan Properties", meta = (ToolTip = "Do we want to use the owners skeleton for the hit scan? "))
 	bool bUseSkeletonForCollision = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities|Hit Scan Properties", meta = (ToolTip = "The socket on the skeleton that the hit scan will be located", EditConditions = "bUseSKeletonForCollision", EditHideConditions))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities|Hit Scan Properties", meta = (ToolTip = "The socket on the skeleton that the hit scan will be located", EditConditions = "bUseSkeletonForCollision", EditHideConditions = true))
 	FName SocketName = NAME_None;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities|Hit Scan Properties", meta = (ToolTip = "The radius of the hit scan getting performed", EditConditions = "bUseSKeletonForCollision", EditHideConditions, UIMin = 0.0f, ClampMin = 0.0f))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities|Hit Scan Properties", meta = (ToolTip = "The radius of the hit scan getting performed", EditConditions = "bUseSkeletonForCollision", EditHideConditions = true, UIMin = 0.0f, ClampMin = 0.0f))
 	float CollisionRadius =0.0f; 	
 	
 	virtual FString GetNotifyName_Implementation() const override;
