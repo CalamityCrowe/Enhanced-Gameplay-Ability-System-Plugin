@@ -18,7 +18,7 @@ public:
 	FName SocketName = NAME_None; 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CollisionRadius; 
+	float CollisionRadius = 0.0f; 
 };
 
 UCLASS(BlueprintType)

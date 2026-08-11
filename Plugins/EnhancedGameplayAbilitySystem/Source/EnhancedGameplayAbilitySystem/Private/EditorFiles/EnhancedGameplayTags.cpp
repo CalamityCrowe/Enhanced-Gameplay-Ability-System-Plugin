@@ -28,14 +28,14 @@ void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	AddTag(Event_MontageTriggered, "Event.Montage.Triggered", "Montage triggered");
 	AddTag(Event_ComboStart, "Event.Combo.Start", "Combo Start"); 
 	AddTag(Event_ComboEnd, "Event.Combo.End", "Combo End");
-	AddTag(Event_ComboInput, "Event.Combo.Input", "Combo Input");
 	AddTag(Event_HitScanStart, "Event.Hitscan.Start", "Hit scan start");
 	AddTag(Event_HitScanEnd, "Event.Hitscan.End", "Hit scan end");
 	
 	AddTag(Data_Damage, "Data.Damage", "Damage");
 	AddTag(Data_Heal, "Data.Heal", "Heal");
 	
-	
+	AddTag(GameplayCue_Damage, "GameplayCue.Damage", "Damage");
+	AddTag(GameplayCue_Heal, "GameplayCue.Heal", "Heal");
 }
 
 void FEnhancedGameplayTags::AddTag(FGameplayTag& OutTag, const ANSICHAR* TagName, const ANSICHAR* TagValue)

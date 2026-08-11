@@ -34,13 +34,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Abilities|Events" ,meta = (ToolTips = "This will be the tag we will listen for getting sent to the actor performing the ability from their input"))
 	FGameplayTag ComboInputTag;
 	
+	void WaitComboInput(); 
+	
 private:
 	UFUNCTION()
 	virtual void ContinueComboStartEvent(FGameplayEventData Payload);
 	UFUNCTION()
 	virtual void ContinueComboEndEvent(FGameplayEventData Payload);
 	UFUNCTION()
-	virtual void InputReceivedEvent(FGameplayEventData Payload); 
+	virtual void InputReceivedEvent(float TimeWaited); 
 	
 	int ComboCount; 
 	

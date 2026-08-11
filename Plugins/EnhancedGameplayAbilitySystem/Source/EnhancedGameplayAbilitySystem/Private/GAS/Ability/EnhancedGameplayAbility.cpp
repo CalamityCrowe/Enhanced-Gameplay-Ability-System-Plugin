@@ -22,10 +22,6 @@ void UEnhancedGameplayAbility::PostInitProperties()
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag("State.Stun",false));
 }
 
-ACharacter* UEnhancedGameplayAbility::GetCharacterFromActorInfo() const
-{
-	return(CurrentActorInfo ? Cast<ACharacter>(CurrentActorInfo->AvatarActor.Get()) : nullptr); 
-}
 
 FGameplayTagContainer UEnhancedGameplayAbility::GetActivationOwnedTags() const
 {

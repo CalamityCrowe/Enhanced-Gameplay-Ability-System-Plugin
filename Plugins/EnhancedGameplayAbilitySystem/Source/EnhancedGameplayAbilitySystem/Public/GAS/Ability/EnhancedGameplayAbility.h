@@ -61,10 +61,11 @@ public:
 	
 	EEnhancedActivationPolicy GetActivationPolicy() const{return ActivationPolicy; };
 	
+	bool ShouldShowInHUD() const {return bShouldShowInHUD;};
 	
+	UAbilityHUDData* GetHUDData() const {return AbilityHUDData; }
 	
-	UFUNCTION(BlueprintCallable,Category = "GAS|Ability")
-	ACharacter* GetCharacterFromActorInfo() const; 
+	FGameplayTag GetCooldownTag() const {return CooldownTag; };
 	
 	UFUNCTION(BlueprintPure)
 	FGameplayTagContainer GetActivationOwnedTags() const;

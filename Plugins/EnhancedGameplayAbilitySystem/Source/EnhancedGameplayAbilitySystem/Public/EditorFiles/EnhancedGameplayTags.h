@@ -32,11 +32,10 @@ public:
 	FGameplayTag Event_MontageTriggered;
 	FGameplayTag Event_ComboStart;
 	FGameplayTag Event_ComboEnd;
-	FGameplayTag Event_ComboInput;
 	
 	FGameplayTag Event_HitScanStart;
 	FGameplayTag Event_HitScanEnd;
-	
+
 	
 	
 protected:
@@ -49,4 +48,9 @@ private:
 	
 	FGameplayTag Data_Damage; 
 	FGameplayTag Data_Heal;
+	
+	FGameplayTag GameplayCue_Damage; 
+	FGameplayTag GameplayCue_Heal;
+	
+	
 };

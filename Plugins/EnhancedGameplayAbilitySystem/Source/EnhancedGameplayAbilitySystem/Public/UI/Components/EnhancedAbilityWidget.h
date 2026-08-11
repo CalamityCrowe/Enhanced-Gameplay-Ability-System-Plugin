@@ -1,0 +1,71 @@
+﻿// 
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
+#include "Blueprint/UserWidget.h"
+#include "EnhancedAbilityWidget.generated.h"
+
+class UEnhancedGameplayAbility;
+class UImage;
+class UOverlay;
+class UTextBlock;
+
+/**
+ * 
+ */
+UCLASS()
+class ENHANCEDGAMEPLAYABILITYSYSTEM_API UEnhancedAbilityWidget : public UUserWidget
+{
+	GENERATED_UCLASS_BODY()
+public: 
+	virtual void NativeConstruct();
+	
+protected:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category = "Abilities", meta = (Categories = "GameplayAbility") )
+	FGameplayTagContainer AbilitiesToFind; 
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UOverlay> AbilityOverlay;
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UImage> AbilityIcon; 
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UOverlay> ActiveOverlay;
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UImage> ActiveIcon;
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UOverlay> CooldownOverlay;
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UImage> CooldownIcon;
+	
+	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
+	TObjectPtr<UTextBlock> CooldownText;
+	
+	UPROPERTY()
+	FGameplayTag CooldownTag;
+	UPROPERTY()
+	FGameplayTag ActiveTag;
+	
+	
+	UPROPERTY()
+	TObjectPtr<const UEnhancedGameplayAbility> AbilityRef; 
+	
+	
+	void SetAbilityImages(const UEnhancedGameplayAbility& Ability);
+	
+	
+private: 
+	
+	UFUNCTION()
+	void CheckForCooldown(FGameplayTag ChangedTag, int32 NewCount);
+	
+	UFUNCTION()
+	void UpdateActiveWidget();
+};

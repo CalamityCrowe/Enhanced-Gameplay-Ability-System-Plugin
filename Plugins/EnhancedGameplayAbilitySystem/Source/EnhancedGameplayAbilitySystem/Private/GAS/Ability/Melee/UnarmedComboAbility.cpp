@@ -4,6 +4,7 @@
 #include "GAS/Ability/Melee/UnarmedComboAbility.h"
 
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
+#include "Abilities/Tasks/AbilityTask_WaitInputPress.h"
 
 UUnarmedComboAbility::UUnarmedComboAbility()
 {
@@ -31,11 +32,15 @@ void UUnarmedComboAbility::MontageStarted()
 	ComboEndEvent->EventReceived.AddDynamic(this, &ThisClass::ContinueComboEndEvent);
 	ComboEndEvent->ReadyForActivation();
 	
-	UAbilityTask_WaitGameplayEvent* InputReceivedEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(
-		this, ComboInputTag, nullptr, false, true); 
-	
-	InputReceivedEvent->EventReceived.AddDynamic(this, &ThisClass::InputReceivedEvent);
-	InputReceivedEvent->ReadyForActivation();
+	WaitComboInput(); 
+}
+
+void UUnarmedComboAbility::WaitComboInput()
+{
+	// this wait task can only be triggered once, so we made it a function to call when we need to wait again
+	UAbilityTask_WaitInputPress* InputPressed = UAbilityTask_WaitInputPress::WaitInputPress(this, false); 
+	InputPressed->OnPress.AddDynamic(this, &ThisClass::InputReceivedEvent);
+	InputPressed->ReadyForActivation();
 }
 
 void UUnarmedComboAbility::ContinueComboStartEvent(FGameplayEventData Payload)
@@ -57,7 +62,8 @@ void UUnarmedComboAbility::ContinueComboEndEvent(FGameplayEventData Payload)
 	}
 }
 
-void UUnarmedComboAbility::InputReceivedEvent(FGameplayEventData Payload)
+void UUnarmedComboAbility::InputReceivedEvent(float TimeWaited)
 {
 	bReceivedInputAtRightTime = bIsWithinComboWindow; 
+	WaitComboInput(); // like here
 }

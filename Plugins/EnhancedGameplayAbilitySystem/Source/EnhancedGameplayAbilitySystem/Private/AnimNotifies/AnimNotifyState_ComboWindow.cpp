@@ -4,6 +4,7 @@
 #include "AnimNotifies/AnimNotifyState_ComboWindow.h"
 
 // engine
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemGlobals.h"
 
 UAnimNotifyState_ComboWindow::UAnimNotifyState_ComboWindow()
@@ -22,6 +23,8 @@ void UAnimNotifyState_ComboWindow::NotifyBegin(USkeletalMeshComponent* MeshComp,
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshComp->GetOwner(),ComboStartTag,FGameplayEventData()); 
+	
 	
 }
 
@@ -29,6 +32,9 @@ void UAnimNotifyState_ComboWindow::NotifyEnd(USkeletalMeshComponent* MeshComp, U
                                              const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
+	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshComp->GetOwner(),ComboEndTag,FGameplayEventData()); 
+	
 }
 
 FString UAnimNotifyState_ComboWindow::GetNotifyName_Implementation() const
