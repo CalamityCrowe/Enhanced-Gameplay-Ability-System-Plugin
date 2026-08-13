@@ -7,6 +7,7 @@
 #include "AbilitySystemGlobals.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
+#include "Characters/CharacterBase.h"
 #include "GameFramework/Character.h"
 #include "GAS/Data/SocketCollisionParamsObject.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -103,7 +104,8 @@ void UBaseUnarmedAbility::HitScanEnded(FGameplayEventData Payload)
 // the standard hit scan logic where we get the start location and perform a trace to get all the objects hit to apply the damage to them
 void UBaseUnarmedAbility::HitScan()
 {
-	FVector SocketLocation = GetCharacterFromActorInfo()->GetMesh()->GetSocketLocation(SocketName);
+	ACharacterBase* OwningCharacter = CastChecked<ACharacterBase>(GetOwningActorFromActorInfo()); 
+	FVector SocketLocation = OwningCharacter->GetMesh()->GetSocketLocation(SocketName);
 	
 	TArray<AActor*> IgnoreActors;
 	IgnoreActors.Add(GetAvatarActorFromActorInfo()); 

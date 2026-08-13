@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"
+#include "Internationalization/Text.h"
 #include "EnhancedAbilityWidget.generated.h"
 
 class UEnhancedGameplayAbility;
@@ -24,7 +25,7 @@ public:
 	
 protected:
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category = "Abilities", meta = (Categories = "GameplayAbility") )
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Abilities", meta = (Categories = "GameplayAbility") )
 	FGameplayTagContainer AbilitiesToFind; 
 	
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
@@ -48,6 +49,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	TObjectPtr<UTextBlock> CooldownText;
 	
+	
 	UPROPERTY()
 	FGameplayTag CooldownTag;
 	UPROPERTY()
@@ -67,5 +69,13 @@ private:
 	void CheckForCooldown(FGameplayTag ChangedTag, int32 NewCount);
 	
 	UFUNCTION()
-	void UpdateActiveWidget();
+	void UpdateActiveWidget(FGameplayTag ChangedTag, int32 NewCount);
+	
+	UFUNCTION()
+	void UpdateCooldownProgress();
+	
+	
+	UPROPERTY()
+	FTimerHandle CooldownTimerHandle;
+
 };

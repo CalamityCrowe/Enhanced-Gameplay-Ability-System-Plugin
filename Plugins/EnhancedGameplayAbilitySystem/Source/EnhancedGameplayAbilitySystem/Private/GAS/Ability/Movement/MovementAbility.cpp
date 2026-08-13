@@ -59,6 +59,7 @@ void UMovementAbility::OnEventTriggered(FGameplayEventData Payload)
 
 void UMovementAbility::OnDashFinish()
 {
+	//CommitAbilityCooldown(CurrentSpecHandle,CurrentActorInfo,CurrentActivationInfo,true); 
 	EndAbility(CurrentSpecHandle,CurrentActorInfo,CurrentActivationInfo,true, false); 
 }
 
@@ -78,13 +79,13 @@ FVector UMovementAbility::GetMoveDirection() const
 	{
 		if (UCharacterMovementComponent* MovementComponent = Character->GetCharacterMovement())
 		{
-			 
-			if (MovementComponent->Velocity.GetSafeNormal()!= FVector::ZeroVector)
+			FVector Velocity = MovementComponent->Velocity.GetSafeNormal();
+			Velocity.Z = 0.0f;
+			if (Velocity != FVector::ZeroVector)
 			{
-				return MovementComponent->Velocity.GetSafeNormal();
+				return Velocity;
 			}			
 		}
-		
 		FVector ControlDirection = Character->GetControlRotation().Vector();
 		ControlDirection.Z = 0;
 		
