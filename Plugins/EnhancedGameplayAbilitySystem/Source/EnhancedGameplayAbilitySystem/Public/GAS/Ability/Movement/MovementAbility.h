@@ -38,7 +38,7 @@ protected:
 	
 	virtual void MontageStarted_Implementation() override;
 
-	virtual void OnEventTriggered(FGameplayEventData Payload) override;
+	virtual void OnEventTriggered_Implementation(FGameplayEventData Payload) override;
 	
 	UFUNCTION()
 	void OnDashFinish();

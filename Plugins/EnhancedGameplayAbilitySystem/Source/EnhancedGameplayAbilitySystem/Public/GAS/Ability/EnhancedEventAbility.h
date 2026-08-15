@@ -49,6 +49,8 @@ protected:
 	virtual void OnMontageInterrupted(); 
 	
 	// this is the function we will override if we have an event to trigger
-	UFUNCTION()
-	virtual void OnEventTriggered(FGameplayEventData Payload);  
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnEventTriggered(FGameplayEventData Payload);  
+
+	virtual void OnEventTriggered_Implementation(FGameplayEventData Payload);
 };

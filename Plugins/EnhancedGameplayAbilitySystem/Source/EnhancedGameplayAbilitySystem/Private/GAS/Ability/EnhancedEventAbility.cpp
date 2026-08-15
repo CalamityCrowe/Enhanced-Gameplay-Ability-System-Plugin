@@ -91,7 +91,7 @@ void UEnhancedEventAbility::OnMontageInterrupted()
 	EndAbility(CurrentSpecHandle,CurrentActorInfo,CurrentActivationInfo,true,true);
 }
 
-void UEnhancedEventAbility::OnEventTriggered(FGameplayEventData Payload)
+
+void UEnhancedEventAbility::OnEventTriggered_Implementation(FGameplayEventData Payload)
 {
-	// we won't implement anything here, but this is what gets extended elsewhere
 }

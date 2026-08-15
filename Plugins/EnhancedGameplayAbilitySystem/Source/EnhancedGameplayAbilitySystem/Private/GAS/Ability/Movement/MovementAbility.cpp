@@ -31,12 +31,9 @@ void UMovementAbility::MontageStarted_Implementation()
 	EventTask->ReadyForActivation(); 
 }
 
-void UMovementAbility::OnEventTriggered(FGameplayEventData Payload)
+void UMovementAbility::OnEventTriggered_Implementation(FGameplayEventData Payload)
 {
-	Super::OnEventTriggered(Payload);
-	
-	// since this is a generic dash ability for here, we won't apply anything here at the moment.
-	// However, we could extend this if we wanted to, by creating a function similar to montage started
+	Super::OnEventTriggered_Implementation(Payload);
 	
 	FVector WorldDirection = GetMoveDirection();
 	float ClampSpeed = GetMaxSpeed();
