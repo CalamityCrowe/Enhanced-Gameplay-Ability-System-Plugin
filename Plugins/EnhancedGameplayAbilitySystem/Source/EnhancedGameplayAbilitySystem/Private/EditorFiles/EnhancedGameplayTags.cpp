@@ -12,6 +12,8 @@ void FEnhancedGameplayTags::InitializeNativeTags()
 
 void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 {
+	FGameplayTag Temp; 
+	
 	// Native Inputs
 	AddTag(Input_Move, "NativeInput.Move", "Movement Inputs"); 
 	AddTag(Input_Aim, "NativeInput.Aim", "Aim Inputs");
@@ -30,12 +32,16 @@ void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	AddTag(Event_ComboEnd, "Event.Combo.End", "Combo End");
 	AddTag(Event_HitScanStart, "Event.Hitscan.Start", "Hit scan start");
 	AddTag(Event_HitScanEnd, "Event.Hitscan.End", "Hit scan end");
-	
+
+	AddTag(Temp, "Data.Cooldown","Cooldown"); 
 	AddTag(Data_Damage, "Data.Damage", "Damage");
 	AddTag(Data_Heal, "Data.Heal", "Heal");
 	
 	AddTag(GameplayCue_Damage, "GameplayCue.Damage", "Damage");
 	AddTag(GameplayCue_Heal, "GameplayCue.Heal", "Heal");
+	AddTag(Temp, "GameplayCue.Shield", "Shield");
+		
+	AddTag(Temp, "Status.Buff.Shield", "Shield Status"); 
 }
 
 void FEnhancedGameplayTags::AddTag(FGameplayTag& OutTag, const ANSICHAR* TagName, const ANSICHAR* TagValue)
