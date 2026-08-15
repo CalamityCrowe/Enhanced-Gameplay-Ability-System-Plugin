@@ -7,9 +7,10 @@
 #include "GameplayEffectExtension.h"
 //plugin 
 #include "Characters/CharacterBase.h"
+#include "Net/UnrealNetwork.h"
 
 
-UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f)
+UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f), Shield(0), MaxShield(100)
 {
 	HitDirectionFrontTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Front"), false); 
 	HitDirectionBackTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Back"), false); 
@@ -134,7 +135,7 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 				if (SourceActor != TargetActor)
 				{
 					// we can do some damage numbers and effects here if we really wanted to, ideally only on the enemies.
-					// so what we can do is grab the 
+					// so what we can do is grab the controller of the enemy to spawn these
 				}	
 			}
 			
@@ -147,4 +148,35 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 	}
 	// will do something later with this
 	
+}
+
+void UEnhancedAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	// helper functions to define how the notify works for the attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, Health, COND_None, REPNOTIFY_Always); 
+	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always); 
+	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, Shield, COND_None, REPNOTIFY_Always)
+	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, MaxShield, COND_None, REPNOTIFY_Always)
+}
+
+// this will be what we do for the on rep notifies, which will just call the helper functions in the base class for attributes 
+void UEnhancedAttributeSet::OnRep_Health(const FGameplayAttributeData& OldData)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, Health, OldData);
+}
+
+void UEnhancedAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldData)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, MaxHealth, OldData);
+}
+
+void UEnhancedAttributeSet::OnRep_Shield(const FGameplayAttributeData& OldData)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, Shield, OldData);
+}
+
+void UEnhancedAttributeSet::OnRep_MaxShield(const FGameplayAttributeData& OldData)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, MaxShield, OldData);
 }
