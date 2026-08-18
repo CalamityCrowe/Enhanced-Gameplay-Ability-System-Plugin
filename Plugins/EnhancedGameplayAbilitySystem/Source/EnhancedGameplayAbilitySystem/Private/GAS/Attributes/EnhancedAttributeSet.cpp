@@ -10,7 +10,7 @@
 #include "Net/UnrealNetwork.h"
 
 
-UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f), Shield(0), MaxShield(100)
+UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f), Shield(100), MaxShield(100)
 {
 	HitDirectionFrontTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Front"), false); 
 	HitDirectionBackTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Back"), false); 
@@ -28,6 +28,10 @@ void UEnhancedAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribu
 	else if (Attribute == GetMaxHealthAttribute())
 	{
 		// might do something here to adjust the current health to increase / decrease by the same amount
+	}
+	else if (Attribute == GetMaxShieldAttribute())
+	{
+		
 	}
 }
 
@@ -87,7 +91,7 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
 	{
 		// we grab the damage to store in a temp location, then we reset it, to prevent different damages from applying more than they need to 
-		const float LocalDamage = GetDamage(); 
+		float LocalDamage = GetDamage(); 
 		SetDamage(0.0f);
 		
 		// we will check if there is a damage value that is greater than 0 so we don't process irrelevant hit react
@@ -99,9 +103,25 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 			{
 				bWasAlive = TargetCharacter->IsAlive();
 			}
-			// next we will apply the damage to the health and clamp it so we don't go into the negatives
-			const float NewHealth = GetHealth() - LocalDamage; 
-			SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
+			float LocalShield = GetShield(); 
+			
+			if (LocalShield > 0.0f)
+			{
+				SetShield(FMath::Clamp(LocalShield - LocalDamage, 0.0f, GetMaxShield()));
+				LocalDamage = LocalDamage - LocalShield;
+				if (LocalDamage > 0.0f)
+				{
+					const float LocalHealth = GetHealth() - LocalDamage; 
+					SetHealth(FMath::Clamp(LocalHealth, 0.0f, GetMaxHealth()));
+				}
+			}
+			else
+			{
+				// next we will apply the damage to the health and clamp it so we don't go into the negatives
+				const float LocalHealth = GetHealth() - LocalDamage; 
+				SetHealth(FMath::Clamp(LocalHealth, 0.0f, GetMaxHealth()));
+			}
+
 			
 			// we will check if the target character is valid still and still alive
 			if (TargetCharacter && bWasAlive)
@@ -144,7 +164,11 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 	}
 	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-		SetHealth(GetHealth()); 
+		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth())); 
+	}
+	else if (Data.EvaluatedData.Attribute == GetShieldAttribute())
+	{
+		SetShield(FMath::Clamp(GetShield(), 0.0f, GetMaxShield())); 
 	}
 	// will do something later with this
 	
