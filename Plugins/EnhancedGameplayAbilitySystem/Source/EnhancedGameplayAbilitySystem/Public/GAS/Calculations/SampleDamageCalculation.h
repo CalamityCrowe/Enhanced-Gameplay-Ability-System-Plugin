@@ -11,7 +11,7 @@
  * 
  * this class will also be marked as abstract and hidedropdown to prevent it from being created by mistake.
  */
-UCLASS(Abstract, HideDropdown)
+UCLASS()
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API USampleDamageCalculation : public UGameplayEffectExecutionCalculation
 {
 	GENERATED_BODY()

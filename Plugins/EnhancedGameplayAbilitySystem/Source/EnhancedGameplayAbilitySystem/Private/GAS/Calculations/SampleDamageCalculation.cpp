@@ -64,6 +64,15 @@ void USampleDamageCalculation::Execute_Implementation(const FGameplayEffectCusto
 	
 	float MitigatedDamage = (UnmitigatedDamage) * 0.5f; // for testing purposes we will just half the damage to get the point across
 	
+	// how we go about checking if they have a buff to mitigate damage
+	
+	
+	if(TargetASC->GetOwnedGameplayTags().HasTag(FGameplayTag::RequestGameplayTag(FName("Status.Buff.Shield"))))
+	{
+		GEngine->AddOnScreenDebugMessage(-1,1.0f,FColor::Red,"Damage Negated"); 
+		MitigatedDamage = 0.0f; // we set the damage to 0 to signal that we have a shield effect on
+	}
+	
 	if (MitigatedDamage > 0.0f)
 	{
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(SampleStatics().DamageProperty, EGameplayModOp::Additive, MitigatedDamage)); 
