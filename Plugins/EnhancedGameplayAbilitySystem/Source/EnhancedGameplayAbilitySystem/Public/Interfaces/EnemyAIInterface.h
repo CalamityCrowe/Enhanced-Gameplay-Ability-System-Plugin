@@ -22,4 +22,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category="AI")
 	void SetMovementSpeed(EMovementSpeed& SpeedMode, float& MovementSpeed);
 	
+	// this is how we get parameters as outputs instead by putting & after the typing
+	// this means we are passing the type in as a reference, which means we can pass in values externally to get the values
+	UFUNCTION(BlueprintNativeEvent, Category="AI")
+	void GetIdealRange(float& OutAttackRange, float& OutDefendRange) const; 
 };

@@ -72,5 +72,5 @@ void UBTask_ActivateAbilityByTag::OnAbilityEnded(UGameplayAbility* Ability)
 
 FString UBTask_ActivateAbilityByTag::GetStaticDescription() const
 {
-	return FString::Printf(TEXT("Activating Ability by Tag: %s"), *AbilityTag.ToString());
+	return FString::Printf(TEXT("%s\n\nActivating Ability by Tag: %s"),*Super::GetStaticDescription(), *AbilityTag.ToString());
 }
