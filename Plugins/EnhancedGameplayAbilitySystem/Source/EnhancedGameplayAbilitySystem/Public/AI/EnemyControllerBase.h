@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "States/AIStates.h"
 #include "EnemyControllerBase.generated.h"
 
 class UBehaviorTree;
@@ -21,6 +22,16 @@ public:
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 	
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Blackboard|Trees")
 	TObjectPtr<UBehaviorTree> BehaviourTree;
+	
+private: 
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAIPerceptionComponent> AIPerception;
+		
+	UPROPERTY()
+	TWeakObjectPtr<AActor> TargetActor;
+		
+	
 };
