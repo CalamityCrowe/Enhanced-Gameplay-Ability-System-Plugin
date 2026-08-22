@@ -42,7 +42,7 @@ void AAICharacterBase::HealthUpdated(const FOnAttributeChangeData& Data)
 	
 	// if we are doing UI stuff,we can pass the health to signal that 
 	
-	if (!IsAlive()|| !ASC->HasMatchingGameplayTag(DeadTag))
+	if (!IsAlive()&& !ASC->HasMatchingGameplayTag(DeadTag))
 	{
 		Die(); 
 	}
