@@ -12,7 +12,7 @@ UBTask_SetMovementSpeed::UBTask_SetMovementSpeed()
 
 EBTNodeResult::Type UBTask_SetMovementSpeed::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (AActor* OwningActor = OwnerComp.GetAIOwner()->GetOwner())
+	if (AActor* OwningActor = OwnerComp.GetAIOwner()->GetPawn())
 	{
 		if (OwningActor->GetClass()->ImplementsInterface(UEnemyAIInterface::StaticClass()))
 		{

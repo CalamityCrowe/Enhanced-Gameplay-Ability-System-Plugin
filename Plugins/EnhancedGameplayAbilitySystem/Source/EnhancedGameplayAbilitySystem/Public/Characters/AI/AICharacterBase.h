@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Characters/CharacterBase.h"
+#include "Interfaces/EnemyAIInterface.h"
 #include "AICharacterBase.generated.h"
 
+
+
 UCLASS()
-class ENHANCEDGAMEPLAYABILITYSYSTEM_API AAICharacterBase : public ACharacterBase
+class ENHANCEDGAMEPLAYABILITYSYSTEM_API AAICharacterBase : public ACharacterBase, public IEnemyAIInterface
 {
 	GENERATED_BODY()
 
@@ -25,10 +28,20 @@ protected:
 	virtual void Die() override;
 	
 	virtual void FinishDying() override;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	FAIMovementProperties AIMovementProperties;
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	FAICombatParameters AICombatParameters;
+	
 private: 
 	UPROPERTY()
 	UEnhancedAttributeSet* HardRefAttributeSet; 
 	
 	UPROPERTY()
-	UEnhancedAbilitySystemComponent* HardRefASC; 
+	UEnhancedAbilitySystemComponent* HardRefASC;
+	
+	void SetMovementSpeed_Implementation(EMovementSpeed& SpeedMode, float& MovementSpeed);
+	void GetIdealRange_Implementation(float& OutAttackRange, float& OutDefendRange) const;
+	
 };

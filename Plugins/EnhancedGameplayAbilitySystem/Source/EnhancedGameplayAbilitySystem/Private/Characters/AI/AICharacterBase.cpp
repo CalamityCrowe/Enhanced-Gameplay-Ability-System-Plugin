@@ -4,6 +4,7 @@
 #include "Characters/AI/AICharacterBase.h"
 
 #include "AI/EnemyControllerBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "GAS/Attributes/EnhancedAttributeSet.h"
 
@@ -61,6 +62,31 @@ void AAICharacterBase::FinishDying()
 {
 	// if we are doing object pooling, we could have them go back to a pool here instead of destroying them in the base class
 	Super::FinishDying();
+}
+
+void AAICharacterBase::SetMovementSpeed_Implementation(EMovementSpeed& SpeedMode, float& MovementSpeed)
+{
+	UCharacterMovementComponent* CMC = GetCharacterMovement(); 
+	if (!CMC)return; 
+	switch (SpeedMode)
+	{
+	case EMovementSpeed::Idle: 
+		MovementSpeed = AIMovementProperties.IdleSpeed; 
+		break;
+	case EMovementSpeed::Walking:
+		MovementSpeed = AIMovementProperties.WalkSpeed;
+		break;
+	case EMovementSpeed::Running:
+		MovementSpeed = AIMovementProperties.RunningSpeed;
+		break;
+	}
+	CMC->MaxWalkSpeed = MovementSpeed;
+}
+
+void AAICharacterBase::GetIdealRange_Implementation(float& OutAttackRange, float& OutDefendRange) const
+{
+	OutAttackRange = AICombatParameters.AttackRange; 
+	OutDefendRange = AICombatParameters.DefendRange; 
 }
 
 
