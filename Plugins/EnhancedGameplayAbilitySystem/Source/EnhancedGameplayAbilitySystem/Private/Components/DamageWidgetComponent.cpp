@@ -50,8 +50,8 @@ void UDamageWidgetComponent::SetLookAtTarget(USceneComponent* InComponent)
 	
 	GetWorld()->GetTimerManager().SetTimer(LookAtTimer, [this]()
 		{	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), LookAtComponent->GetComponentLocation());
-			FRotator NewRotation = FRotator(LookAtRotation.Pitch,LookAtRotation.Yaw,0);
-			SetWorldRotation(NewRotation);
+			LookAtRotation.Roll = 0.0f;	
+			SetWorldRotation(LookAtRotation);
 		}, LookAtTime, true);
 
 }
