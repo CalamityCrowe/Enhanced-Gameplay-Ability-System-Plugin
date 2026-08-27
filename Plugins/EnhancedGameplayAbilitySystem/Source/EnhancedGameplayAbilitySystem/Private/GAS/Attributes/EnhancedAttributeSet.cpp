@@ -8,6 +8,7 @@
 //plugin 
 #include "Characters/CharacterBase.h"
 #include "Net/UnrealNetwork.h"
+#include "Player/EnhancedPlayerController.h"
 
 
 UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f), Shield(100), MaxShield(100)
@@ -54,7 +55,7 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 	{
 		TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
 		TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		TargetCharacter = Cast<ACharacterBase>(TargetCharacter);
+		TargetCharacter = Cast<ACharacterBase>(TargetActor);
 	}
 	
 	
@@ -92,6 +93,7 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 	{
 		// we grab the damage to store in a temp location, then we reset it, to prevent different damages from applying more than they need to 
 		float LocalDamage = GetDamage(); 
+		const float DisplayDamage = LocalDamage;
 		SetDamage(0.0f);
 		
 		// we will check if there is a damage value that is greater than 0 so we don't process irrelevant hit react
@@ -154,6 +156,10 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 				
 				if (SourceActor != TargetActor)
 				{
+					if (AEnhancedPlayerController* PC = Cast<AEnhancedPlayerController>(SourceController))
+					{
+						PC->ShowDamageNumber(DisplayDamage,TargetActor); 
+					}
 					// we can do some damage numbers and effects here if we really wanted to, ideally only on the enemies.
 					// so what we can do is grab the controller of the enemy to spawn these
 				}	

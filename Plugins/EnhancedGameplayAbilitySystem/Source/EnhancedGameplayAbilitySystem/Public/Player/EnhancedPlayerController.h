@@ -7,6 +7,7 @@
 #include "EnhancedPlayerController.generated.h"
 
 
+class UDamageWidgetComponent;
 class AEnhancedPlayerState;
 class UEnhancedAbilitySystemComponent;
 class UInputMappingContext;
@@ -37,6 +38,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Input System|Ability System")
 	virtual UEnhancedAbilitySystemComponent* GetEnhancedAbilitySystemComponent() const;
 	
+	virtual void ShowDamageNumber(const float InDamage, AActor* TargetActor); 
+	
 	
 protected:
 	
@@ -46,6 +49,10 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input System|Inputs", meta = (ToolTip = "we add all the mapping context that we will be using in game here\nThe Key of the map is a Inputmapping context and the value is the priority for the mapping context\nwe would do this to specific inputs seperate, like ability based ones, pause or generic character movements"))
 	TMap<TObjectPtr<UInputMappingContext>, int32> MappingContexts;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UDamageWidgetComponent> DamageComponentClass;
+	
 	
 	// if we are doing paused inputs, etc. then this is where we would handle that here by setting up all the relevant HUD classes to retrieve along with the behaviour of what we want to happen
 	// so if we hard pause the game like bioshock, it takes 2, etc or if we do a dark souls like pause where it overlays the screen and just disables attacks on the player whilst everything else can attack

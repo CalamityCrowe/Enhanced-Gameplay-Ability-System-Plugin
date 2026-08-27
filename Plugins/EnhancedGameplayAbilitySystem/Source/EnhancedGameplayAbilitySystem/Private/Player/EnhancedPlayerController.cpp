@@ -6,6 +6,8 @@
 #include "EnhancedInputSubsystems.h"
 
 // plugin
+#include "Camera/CameraComponent.h"
+#include "Components/DamageWidgetComponent.h"
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "Player/EnhancedPlayerState.h"
 
@@ -53,6 +55,19 @@ UEnhancedAbilitySystemComponent* AEnhancedPlayerController::GetEnhancedAbilitySy
 	 }
 	return nullptr; 
 }
+
+void AEnhancedPlayerController::ShowDamageNumber(const float InDamage, AActor* TargetActor)
+{
+	if (!TargetActor || !DamageComponentClass) return; 
+	
+	UDamageWidgetComponent* DamageWidgetComponent = NewObject<UDamageWidgetComponent>(TargetActor, DamageComponentClass); // presuming the widget component has been subclassed in blueprint
+	DamageWidgetComponent->RegisterComponent();
+	DamageWidgetComponent->AttachToComponent(TargetActor->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform); 
+	DamageWidgetComponent->SetDamageText(InDamage);
+	DamageWidgetComponent->SetLookAtTarget(GetPawn()->FindComponentByClass<UCameraComponent>()); 
+	
+}
+
 // We override the processing of the inputs to handle the ability inputs here
 void AEnhancedPlayerController::PostProcessInput(const float DeltaTime, const bool bGamePaused)
 {
