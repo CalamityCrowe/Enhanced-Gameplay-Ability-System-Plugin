@@ -38,6 +38,18 @@ public:
 	FGameplayAttributeData MaxShield; 
 	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, MaxShield)
 	
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_XP)
+	FGameplayAttributeData XP;
+	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, XP)
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_MaxXP)
+	FGameplayAttributeData MaxXP;
+	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, MaxXP)
+	
+	UPROPERTY(BlueprintReadOnly, Category= "Attributes", ReplicatedUsing = OnRep_Level)
+	FGameplayAttributeData Level;
+	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, Level)
+	
 protected: 
 	
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
@@ -58,6 +70,16 @@ protected:
 	virtual void OnRep_Shield(const FGameplayAttributeData& OldData); 
 	UFUNCTION()
 	virtual void OnRep_MaxShield(const FGameplayAttributeData& OldData); 
+	
+	UFUNCTION()
+	virtual void OnRep_XP(const FGameplayAttributeData& OldData); 
+	UFUNCTION()
+	virtual void OnRep_MaxXP(const FGameplayAttributeData& OldData); 
+	UFUNCTION()
+	virtual void OnRep_Level(const FGameplayAttributeData& OldData); 
+	
+	virtual void TriggerLevelUp(); 
+	
 private: 
 	FGameplayTag HitDirectionFrontTag;
 	FGameplayTag HitDirectionBackTag;

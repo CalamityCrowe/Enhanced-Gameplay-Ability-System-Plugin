@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "EnhancedPlayerHUDWidget.generated.h"
 
+class UEnhancedLevelWidget;
 class UEnhancedStatBar;
 /**
  * 
@@ -22,4 +23,8 @@ public:
 protected: 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<UEnhancedStatBar> HealthBar; 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<UEnhancedStatBar> ShieldBar;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<UEnhancedLevelWidget> LevelIcon;
 };

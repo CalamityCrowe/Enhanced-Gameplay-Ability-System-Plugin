@@ -13,8 +13,6 @@ UFloatingHealthComponent::UFloatingHealthComponent()
 	
 }
 
-
-
 void UFloatingHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();

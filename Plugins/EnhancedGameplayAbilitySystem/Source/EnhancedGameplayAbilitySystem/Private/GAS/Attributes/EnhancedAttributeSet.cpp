@@ -12,6 +12,7 @@
 
 
 UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f), Shield(100), MaxShield(100)
+,XP(0.f), MaxXP(100.f), Level(1.f)
 {
 	HitDirectionFrontTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Front"), false); 
 	HitDirectionBackTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Back"), false); 
@@ -33,6 +34,14 @@ void UEnhancedAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribu
 	else if (Attribute == GetMaxShieldAttribute())
 	{
 		
+	}
+	else if(Attribute == GetXPAttribute())
+	{
+		NewValue = FMath::Max(NewValue, 0);
+	}
+	else if(Attribute == GetLevelAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue,1, 99);
 	}
 }
 
@@ -188,6 +197,9 @@ void UEnhancedAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePro
 	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always); 
 	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, Shield, COND_None, REPNOTIFY_Always)
 	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, MaxShield, COND_None, REPNOTIFY_Always)
+	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, XP,COND_None, REPNOTIFY_Always); 
+	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, MaxXP,COND_None, REPNOTIFY_Always); 
+	DOREPLIFETIME_CONDITION_NOTIFY(UEnhancedAttributeSet, Level,COND_None, REPNOTIFY_Always); 
 }
 
 // this will be what we do for the on rep notifies, which will just call the helper functions in the base class for attributes 
@@ -209,4 +221,29 @@ void UEnhancedAttributeSet::OnRep_Shield(const FGameplayAttributeData& OldData)
 void UEnhancedAttributeSet::OnRep_MaxShield(const FGameplayAttributeData& OldData)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, MaxShield, OldData);
+}
+
+void UEnhancedAttributeSet::OnRep_XP(const FGameplayAttributeData& OldData)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, XP, OldData);
+}
+
+void UEnhancedAttributeSet::OnRep_MaxXP(const FGameplayAttributeData& OldData)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, MaxXP, OldData);
+}
+
+void UEnhancedAttributeSet::OnRep_Level(const FGameplayAttributeData& OldData)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, Level, OldData);
+}
+
+// going to look at this later as I am not certain I like this and not to sure of the setup I am going for 
+void UEnhancedAttributeSet::TriggerLevelUp()
+{
+	const float LocalXP = GetXP(); 
+	SetXP(0); 
+	const float Difference = LocalXP - GetMaxXP();
+	SetXP(Difference);
+	SetLevel(FMath::RoundToInt(GetLevel())+1); 
 }
