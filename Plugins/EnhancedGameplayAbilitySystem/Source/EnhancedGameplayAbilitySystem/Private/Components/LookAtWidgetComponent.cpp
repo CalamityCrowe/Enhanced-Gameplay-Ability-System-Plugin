@@ -10,7 +10,6 @@ ULookAtWidgetComponent::ULookAtWidgetComponent()
 {
 
 	PrimaryComponentTick.bCanEverTick = true;
-
 	
 }
 

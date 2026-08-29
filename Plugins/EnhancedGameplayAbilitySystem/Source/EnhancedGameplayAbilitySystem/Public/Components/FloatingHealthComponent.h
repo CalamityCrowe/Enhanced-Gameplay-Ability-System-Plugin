@@ -3,30 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/WidgetComponent.h"
+#include "LookAtWidgetComponent.h"
 #include "FloatingHealthComponent.generated.h"
 
 
+class ACharacterBase;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class ENHANCEDGAMEPLAYABILITYSYSTEM_API UFloatingHealthComponent : public UWidgetComponent
+class ENHANCEDGAMEPLAYABILITYSYSTEM_API UFloatingHealthComponent : public ULookAtWidgetComponent
 {
 	GENERATED_BODY()
 
 public:
 	UFloatingHealthComponent();
 
-	void SetLookAtTarget(USceneComponent* InTarget); 
-
 protected:
-	
+	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	FTimerHandle LookAtTimer; 
-
-	UPROPERTY(EditDefaultsOnly, Category = "UserInterface", meta = (ToolTip = "How often we should be updating the widget to face towards the camera", UIMin = 0.01f, ClampMin = 0.01f))
-	float LookAtTime;
 	
+	
+private: 
 	UPROPERTY()
-	TObjectPtr<USceneComponent> Target;
-	
+	TWeakObjectPtr<ACharacterBase> OwningCharacterRef;
 };

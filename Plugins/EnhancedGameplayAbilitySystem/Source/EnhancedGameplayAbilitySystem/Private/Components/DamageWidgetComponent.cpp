@@ -18,6 +18,7 @@ void UDamageWidgetComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
 	MoveDirection = UKismetMathLibrary::RandomUnitVector();
 	MoveSpeed = UKismetMathLibrary::RandomFloatInRange(MinMoveSpeed, MaxMoveSpeed);
 }
@@ -26,9 +27,7 @@ void UDamageWidgetComponent::TickComponent(float DeltaTime, enum ELevelTick Tick
 	FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
 	SetWorldLocation(GetComponentLocation() + MoveDirection);
-	
 }
 
 
@@ -43,19 +42,4 @@ void UDamageWidgetComponent::SetDamageText(const float InDamage)
 		DestroyComponent();
 	}, TimeToLive, false); 
 }
-
-void UDamageWidgetComponent::SetLookAtTarget(USceneComponent* InComponent)
-{
-	LookAtComponent = InComponent;
-	
-	GetWorld()->GetTimerManager().SetTimer(LookAtTimer, [this]()
-		{	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), LookAtComponent->GetComponentLocation());
-			LookAtRotation.Roll = 0.0f;	
-			SetWorldRotation(LookAtRotation);
-		}, LookAtTime, true);
-
-}
-
-
-
 

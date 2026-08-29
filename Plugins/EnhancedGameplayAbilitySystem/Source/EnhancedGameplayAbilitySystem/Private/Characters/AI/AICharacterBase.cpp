@@ -4,6 +4,7 @@
 #include "Characters/AI/AICharacterBase.h"
 
 #include "AI/EnemyControllerBase.h"
+#include "Components/FloatingHealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "GAS/Attributes/EnhancedAttributeSet.h"
@@ -28,6 +29,13 @@ void AAICharacterBase::BeginPlay()
 	AbilitySet->GiveToAbilitySystem(ASC.Get(), &GrantedAbilityHandles, this);
 	
 	ASC->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AAICharacterBase::HealthUpdated); 
+	
+	if (FloatingHealthComponentClass)
+	{
+		UFloatingHealthComponent* HealthComponent = NewObject<UFloatingHealthComponent>(this, FloatingHealthComponentClass);
+		HealthComponent->RegisterComponent();
+		HealthComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("Health Socket")); 
+	}
 	
 }
 

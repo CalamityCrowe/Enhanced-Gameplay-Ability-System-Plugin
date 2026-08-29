@@ -7,7 +7,7 @@
 #include "Interfaces/EnemyAIInterface.h"
 #include "AICharacterBase.generated.h"
 
-
+class UFloatingHealthComponent;
 
 UCLASS()
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API AAICharacterBase : public ACharacterBase, public IEnemyAIInterface
@@ -40,6 +40,9 @@ private:
 	
 	UPROPERTY()
 	UEnhancedAbilitySystemComponent* HardRefASC;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UFloatingHealthComponent> FloatingHealthComponentClass;
 	
 	void SetMovementSpeed_Implementation(EMovementSpeed& SpeedMode, float& MovementSpeed);
 	void GetIdealRange_Implementation(float& OutAttackRange, float& OutDefendRange) const;

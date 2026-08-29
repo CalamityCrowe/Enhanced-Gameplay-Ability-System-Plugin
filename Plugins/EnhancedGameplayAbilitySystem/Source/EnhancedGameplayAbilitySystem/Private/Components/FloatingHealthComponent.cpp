@@ -1,33 +1,36 @@
-﻿
+﻿// 
+
 
 #include "Components/FloatingHealthComponent.h"
 
-#include "Kismet/KismetMathLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "Characters/CharacterBase.h"
+#include "UI/Enemy/EnhancedEnemyStatsWidget.h"
 
-
+// Sets default values for this component's properties
 UFloatingHealthComponent::UFloatingHealthComponent()
 {
-	SetWidgetSpace(EWidgetSpace::World); 
-	SetDrawSize(FVector2D(100.f, 30.f));
-	SetTwoSided(false);
-	SetVisibility(true);
+	
 }
 
-void UFloatingHealthComponent::SetLookAtTarget(USceneComponent* InTarget)
-{
-	Target = InTarget;
-	GetWorld()->GetTimerManager().SetTimer(LookAtTimer, [this]()
-	{
-		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetComponentLocation(), Target->GetComponentLocation()); 
-		LookAtRotation.Roll = 0.0f; 
-		SetWorldRotation(LookAtRotation);
-	},0.1f, true); 
-}
 
 
 void UFloatingHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	UEnhancedEnemyStatsWidget* ESWidget = Cast<UEnhancedEnemyStatsWidget>(GetWidget()); 
+	if (!ESWidget) return;
+	
+	if (ACharacterBase* Character = Cast<ACharacterBase>(GetOwner()))
+	{
+		OwningCharacterRef = Character;
+		if (UAbilitySystemComponent* ASC = OwningCharacterRef->GetAbilitySystemComponent())
+		{
+			ESWidget->InitializeStats(ASC); 		
+		}
+	}
+
 }
 
 

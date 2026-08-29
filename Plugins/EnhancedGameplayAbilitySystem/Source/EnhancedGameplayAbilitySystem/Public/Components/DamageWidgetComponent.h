@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/WidgetComponent.h"
+#include "Components/LookAtWidgetComponent.h"
 #include "DamageWidgetComponent.generated.h"
 
 
 class UDamageNumberWidget;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class ENHANCEDGAMEPLAYABILITYSYSTEM_API UDamageWidgetComponent : public UWidgetComponent
+class ENHANCEDGAMEPLAYABILITYSYSTEM_API UDamageWidgetComponent : public ULookAtWidgetComponent
 {
 	GENERATED_BODY()
 
@@ -22,14 +22,11 @@ public:
 	
 	void SetDamageText(const float InDamage);
 
-	void SetLookAtTarget(USceneComponent* InComponent);
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "User Interface", meta = (ToolTip = "How long the component is allowed to live", UIMin = 0.1f, ClampMin = 0.1f))
 	float TimeToLive; 
 	
-	UPROPERTY(EditDefaultsOnly, Category = "User Interface", meta = (ToolTip = "How often it should update the look at rotation of the widget", UIMin = 0.1f, ClampMin = 0.1f, UIMax = 1.f, ClampMax = 1.f))
-	float LookAtTime; 
 	
 	UPROPERTY(EditDefaultsOnly, Category = "User Interface", meta = (ToolTip = "The minimum value for the movement speed"))
 	float MinMoveSpeed;
