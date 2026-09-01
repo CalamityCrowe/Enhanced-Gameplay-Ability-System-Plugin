@@ -44,7 +44,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UFloatingHealthComponent> FloatingHealthComponentClass;
 	
-	void SetMovementSpeed_Implementation(EMovementSpeed& SpeedMode, float& MovementSpeed);
-	void GetIdealRange_Implementation(float& OutAttackRange, float& OutDefendRange) const;
+	virtual void SetMovementSpeed_Implementation(EMovementSpeed& SpeedMode, float& MovementSpeed) override;
+	virtual void GetIdealRange_Implementation(float& OutAttackRange, float& OutDefendRange) const override;
 	
 };

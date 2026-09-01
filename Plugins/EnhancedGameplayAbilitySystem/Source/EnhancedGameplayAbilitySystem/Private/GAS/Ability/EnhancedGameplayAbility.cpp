@@ -3,7 +3,9 @@
 
 #include "GAS/Ability/EnhancedGameplayAbility.h"
 
+#include "AbilitySystemLog.h"
 #include "AbilitySystemComponent.h"
+#include "AssetDefinitionAssetInfo.h"
 #include "GameFramework/Character.h"
 
 UEnhancedGameplayAbility::UEnhancedGameplayAbility():ActivationPolicy(EEnhancedActivationPolicy::OnInputTriggered),bActivateOnGranted(false)
@@ -88,4 +90,40 @@ FGameplayTagContainer* UEnhancedGameplayAbility::GetCooldownTags() const
 UGameplayEffect* UEnhancedGameplayAbility::GetCooldownGameplayEffect() const
 {
 	return DynamicCooldownEffect? DynamicCooldownEffect->GetDefaultObject<UGameplayEffect>():nullptr;
+}
+
+void UEnhancedGameplayAbility::IncrementLevel(const int32 IncreaseValue)
+{
+	const int32 NewLevel = GetAbilityLevel() + IncreaseValue; 
+	if (NewLevel < AbilityMaxLevel)
+	{
+		SetAbilityLevel(NewLevel);
+	}
+}
+
+void UEnhancedGameplayAbility::DecrementLevel(const int32 IncreaseValue)
+{
+	const int32 NewLevel = GetAbilityLevel() - IncreaseValue;
+	if (NewLevel > AbilityMinLevel)
+	{
+		SetAbilityLevel(NewLevel);
+	}
+}
+
+// since there is no matching set ability level, the equivalent has been made here and made blueprint call able
+void UEnhancedGameplayAbility::SetAbilityLevel(const int32 NewAbilityLevel)
+{
+	ensure(CurrentActorInfo); 
+	if (!CurrentActorInfo || !CurrentActorInfo->IsNetAuthority()) return;
+	
+	UAbilitySystemComponent* AbilitySystemComponent = CurrentActorInfo? CurrentActorInfo->AbilitySystemComponent.Get():nullptr;
+	FGameplayAbilitySpec* Spec = AbilitySystemComponent? AbilitySystemComponent->FindAbilitySpecFromHandle(CurrentSpecHandle): nullptr;
+	
+	if (!Spec)
+	{
+		ABILITY_LOG(Warning, TEXT("UEnhancedGameplayAbility::SetAbilityLevel. Invalid AbilitySpecHandle %s for Ability %s"), *CurrentSpecHandle.ToString(), *GetNameSafe(this)); 
+		return;
+	}
+ 	Spec->Level = NewAbilityLevel;
+	AbilitySystemComponent->MarkAbilitySpecDirty(*Spec); 
 }

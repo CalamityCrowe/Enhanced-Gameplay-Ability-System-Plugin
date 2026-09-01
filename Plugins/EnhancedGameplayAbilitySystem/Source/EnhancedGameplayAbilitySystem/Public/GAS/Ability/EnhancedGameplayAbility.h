@@ -84,11 +84,24 @@ public:
 	
 	virtual UGameplayEffect* GetCooldownGameplayEffect() const override;
 	
+	UFUNCTION(BlueprintCallable, Category = "Gameplay Ability")
+	virtual void IncrementLevel(const int32 IncreaseValue = 1);
+	
+	UFUNCTION(BlueprintCallable, Category = "Gameplay Ability")
+	virtual void DecrementLevel(const int32 IncreaseValue = 1);
+	
+	UFUNCTION(BlueprintCallable, Category= "Gameplay Ability")
+	virtual void SetAbilityLevel(const int32 NewAbilityLevel); 
+	
 protected: 
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
 	bool bHasCooldown;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Level", meta = (ClampMin = 1, UIMin = 1, ToolTip = "The minimum level the ability can be for the level"))
+	int32 AbilityMinLevel;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Level", meta = (ClampMin = 1, UIMin = 1, ToolTip = "The maximum level the ability can be for the level"))
+	int32 AbilityMaxLevel;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities|Cooldowns", meta =(ToolTip = "This will be the tag we will be using to assign if the ability is on cooldown", EditCondition = "bHasCooldown", EditConditionHides))
 	FGameplayTag CooldownTag; 
