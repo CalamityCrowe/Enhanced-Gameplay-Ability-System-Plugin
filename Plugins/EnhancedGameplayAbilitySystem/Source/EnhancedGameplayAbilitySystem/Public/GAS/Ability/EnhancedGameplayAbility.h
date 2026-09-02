@@ -84,13 +84,13 @@ public:
 	
 	virtual UGameplayEffect* GetCooldownGameplayEffect() const override;
 	
-	UFUNCTION(BlueprintCallable, Category = "Gameplay Ability")
+	UFUNCTION(BlueprintCallable, Category = "Gameplay Ability", meta = (ToolTip = "Increase the current ability level by a set amount passed in"))
 	virtual void IncrementLevel(const int32 IncreaseValue = 1);
 	
-	UFUNCTION(BlueprintCallable, Category = "Gameplay Ability")
-	virtual void DecrementLevel(const int32 IncreaseValue = 1);
+	UFUNCTION(BlueprintCallable, Category = "Gameplay Ability", meta = (ToolTip = "Decrease the current ability level by a set amount passed in"))
+	virtual void DecrementLevel(const int32 DecreaseValue = 1);
 	
-	UFUNCTION(BlueprintCallable, Category= "Gameplay Ability")
+	UFUNCTION(BlueprintCallable, Category= "Gameplay Ability", meta = (ToolTip = "Set the level of the current ability"))
 	virtual void SetAbilityLevel(const int32 NewAbilityLevel); 
 	
 protected: 

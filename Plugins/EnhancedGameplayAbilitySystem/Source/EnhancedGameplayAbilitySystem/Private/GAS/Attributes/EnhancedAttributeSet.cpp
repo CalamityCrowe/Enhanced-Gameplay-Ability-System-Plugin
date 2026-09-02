@@ -12,7 +12,7 @@
 
 
 UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f), Shield(100), MaxShield(100)
-,XP(0.f), MaxXP(100.f), Level(1.f)
+,XP(0.f), MaxXP(3.f), Level(1.f), XPGained(0.0f), XPBounty(5)
 {
 	HitDirectionFrontTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Front"), false); 
 	HitDirectionBackTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Back"), false); 
@@ -35,7 +35,7 @@ void UEnhancedAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribu
 	{
 		
 	}
-	else if(Attribute == GetXPAttribute())
+	else if(Attribute == GetXPAttribute() || Attribute == GetMaxXPAttribute())
 	{
 		NewValue = FMath::Max(NewValue, 0);
 	}
@@ -43,6 +43,7 @@ void UEnhancedAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribu
 	{
 		NewValue = FMath::Clamp(NewValue,1, 99);
 	}
+	
 }
 
 void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
@@ -169,12 +170,44 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 					{
 						PC->ShowDamageNumber(DisplayDamage,TargetActor); 
 					}
-					// we can do some damage numbers and effects here if we really wanted to, ideally only on the enemies.
-					// so what we can do is grab the controller of the enemy to spawn these
 				}	
+				if (!TargetCharacter->IsAlive())
+				{
+					if (SourceController != TargetController)
+					{
+						UGameplayEffect* GEBounty = NewObject<UGameplayEffect>(GetTransientPackage(), FName("Bounty"));
+						GEBounty->DurationPolicy = EGameplayEffectDurationType::Instant; 
+						
+						const int32 Idx = GEBounty->Modifiers.Num(); 
+						GEBounty->Modifiers.SetNum(Idx +1);
+						
+						FGameplayModifierInfo& InfoXP = GEBounty->Modifiers[Idx];
+						FScalableFloat Test = FScalableFloat(GetXPBounty());
+						
+						InfoXP.ModifierMagnitude = FScalableFloat(GetXPBounty());
+						InfoXP.ModifierOp = EGameplayModOp::Additive; 
+						InfoXP.Attribute = UEnhancedAttributeSet::GetXPGainedAttribute(); 
+						
+						
+						Source->ApplyGameplayEffectToSelf(GEBounty,1.0f, Source->MakeEffectContext()); 
+					}
+				} 
+				
 			}
 			
 			
+		}
+	}
+	else if (Data.EvaluatedData.Attribute == GetXPGainedAttribute())
+	{
+		const float LocalXPGained = GetXPGained();
+		const float LocalXP = GetXP(); 
+		SetXPGained(0.0f); 
+
+		SetXP(LocalXP + LocalXPGained);
+		if (LocalXP + LocalXPGained > GetMaxXP())
+		{
+			TriggerLevelUp(); 
 		}
 	}
 	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
@@ -238,12 +271,17 @@ void UEnhancedAttributeSet::OnRep_Level(const FGameplayAttributeData& OldData)
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, Level, OldData);
 }
 
+
 // going to look at this later as I am not certain I like this and not to sure of the setup I am going for 
 void UEnhancedAttributeSet::TriggerLevelUp()
 {
 	const float LocalXP = GetXP(); 
-	SetXP(0); 
 	const float Difference = LocalXP - GetMaxXP();
 	SetXP(Difference);
-	SetLevel(FMath::RoundToInt(GetLevel())+1); 
+	SetLevel(FMath::RoundToInt(GetLevel())+1);
+		// make this function recursive
+	// we can grab the curve from the source object by defining the MaxXP curve in there?
+	// means passing in the source object as a reference, so we can grab the XP curve
+	
+	if (GetXP() >= GetMaxXP()) TriggerLevelUp(); 
 }

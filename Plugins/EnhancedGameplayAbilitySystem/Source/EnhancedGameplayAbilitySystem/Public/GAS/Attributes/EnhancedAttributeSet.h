@@ -46,6 +46,16 @@ public:
 	FGameplayAttributeData MaxXP;
 	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, MaxXP)
 	
+	// similar concept to the damage attribute, we don't need to replicate this as it is a meta attribute
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+	FGameplayAttributeData XPGained;
+	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, XPGained)
+	
+	// this will be what we use to define how much exp we should give the character that has killed the enemy
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+	FGameplayAttributeData XPBounty;
+	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, XPBounty)
+	
 	UPROPERTY(BlueprintReadOnly, Category= "Attributes", ReplicatedUsing = OnRep_Level)
 	FGameplayAttributeData Level;
 	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedAttributeSet, Level)
@@ -77,6 +87,7 @@ protected:
 	virtual void OnRep_MaxXP(const FGameplayAttributeData& OldData); 
 	UFUNCTION()
 	virtual void OnRep_Level(const FGameplayAttributeData& OldData); 
+
 	
 	virtual void TriggerLevelUp(); 
 	

@@ -101,9 +101,9 @@ void UEnhancedGameplayAbility::IncrementLevel(const int32 IncreaseValue)
 	}
 }
 
-void UEnhancedGameplayAbility::DecrementLevel(const int32 IncreaseValue)
+void UEnhancedGameplayAbility::DecrementLevel(const int32 DecreaseValue)
 {
-	const int32 NewLevel = GetAbilityLevel() - IncreaseValue;
+	const int32 NewLevel = GetAbilityLevel() - DecreaseValue;
 	if (NewLevel > AbilityMinLevel)
 	{
 		SetAbilityLevel(NewLevel);

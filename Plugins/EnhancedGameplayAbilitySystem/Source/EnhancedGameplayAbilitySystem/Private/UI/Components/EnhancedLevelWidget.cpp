@@ -37,7 +37,7 @@ void UEnhancedLevelWidget::NativeDestruct()
 
 void UEnhancedLevelWidget::OnAttributeChanged(const FOnAttributeChangeData& Data)
 {
-	if (Data.Attribute != UEnhancedAttributeSet::GetLevelAttribute())
+	if (Data.Attribute == UEnhancedAttributeSet::GetLevelAttribute())
 	{
 		FText TempLevelText = UTextFormattingHelper::FormatFloatWithCustomOptions(Data.NewValue, LevelTextFormat);
 		LevelText->SetText(TempLevelText); 

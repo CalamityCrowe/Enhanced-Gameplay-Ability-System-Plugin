@@ -107,8 +107,12 @@ void UBaseUnarmedAbility::HitScan()
 	ACharacterBase* OwningCharacter = CastChecked<ACharacterBase>(GetOwningActorFromActorInfo()); 
 	FVector SocketLocation = OwningCharacter->GetMesh()->GetSocketLocation(SocketName);
 	
+	UAbilitySystemComponent* OwningASC = OwningCharacter? OwningCharacter->GetAbilitySystemComponent(): nullptr;
+	
 	TArray<AActor*> IgnoreActors;
 	IgnoreActors.Add(GetAvatarActorFromActorInfo()); 
+	
+	
 	
 	TArray<FHitResult> HitResults;
 	bool bHit = UKismetSystemLibrary::SphereTraceMultiForObjects(GetWorld(), SocketLocation, SocketLocation, CollisionRadius, HitableObjectTypes,
@@ -124,12 +128,11 @@ void UBaseUnarmedAbility::HitScan()
 			if (!HitActors.Contains(HitActor) && ASC)
 			{
 				HitActors.AddUnique(HitActor);
-				FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(EffectClass, 1);
+				FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(EffectClass, GetAbilityLevel());
 				EffectSpecHandle.Data->SetSetByCallerMagnitude(EffectMagnitudeTag, EffectMagnitude); 
 				
 				EffectSpecHandle.Data->GetContext().AddHitResult(Hit,true); 
-				ASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get()); 
-				
+				OwningASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
 			}
 			
 		}
