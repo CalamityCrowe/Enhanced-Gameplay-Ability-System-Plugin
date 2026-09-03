@@ -92,6 +92,7 @@ UGameplayEffect* UEnhancedGameplayAbility::GetCooldownGameplayEffect() const
 	return DynamicCooldownEffect? DynamicCooldownEffect->GetDefaultObject<UGameplayEffect>():nullptr;
 }
 
+// this will increase the current abilities level by a set amount.
 void UEnhancedGameplayAbility::IncrementLevel(const int32 IncreaseValue)
 {
 	const int32 NewLevel = GetAbilityLevel() + IncreaseValue; 
@@ -111,6 +112,7 @@ void UEnhancedGameplayAbility::DecrementLevel(const int32 DecreaseValue)
 }
 
 // since there is no matching set ability level, the equivalent has been made here and made blueprint call able
+// this is so we can avoid having to remove an ability and reapplying it at a higher level
 void UEnhancedGameplayAbility::SetAbilityLevel(const int32 NewAbilityLevel)
 {
 	ensure(CurrentActorInfo); 
@@ -125,5 +127,5 @@ void UEnhancedGameplayAbility::SetAbilityLevel(const int32 NewAbilityLevel)
 		return;
 	}
  	Spec->Level = NewAbilityLevel;
-	AbilitySystemComponent->MarkAbilitySpecDirty(*Spec); 
+	AbilitySystemComponent->MarkAbilitySpecDirty(*Spec); // this notifies that the spec has been modified for the level increase
 }

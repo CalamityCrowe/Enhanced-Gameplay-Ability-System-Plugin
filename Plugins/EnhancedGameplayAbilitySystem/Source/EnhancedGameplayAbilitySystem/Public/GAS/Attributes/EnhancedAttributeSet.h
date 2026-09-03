@@ -88,7 +88,7 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_Level(const FGameplayAttributeData& OldData); 
 
-	
+	// this is a recursive function where it will keep calling it, until it is no longer able to level
 	virtual void TriggerLevelUp(); 
 	
 private: 

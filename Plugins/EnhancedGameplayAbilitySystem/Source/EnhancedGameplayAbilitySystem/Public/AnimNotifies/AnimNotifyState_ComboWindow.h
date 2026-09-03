@@ -8,7 +8,7 @@
 #include "AnimNotifyState_ComboWindow.generated.h"
 
 /**
- * 
+ *  this is how we will be defining that the combo is ready to receive another input
  */
 UCLASS()
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UAnimNotifyState_ComboWindow : public UAnimNotifyState

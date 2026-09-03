@@ -5,14 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"
-#include "Internationalization/Text.h"
+#include "UI/Formatting/BlueprintNumberFormatting.h"
 #include "EnhancedAbilityWidget.generated.h"
 
 class UEnhancedGameplayAbility;
 class UImage;
 class UOverlay;
 class UTextBlock;
-
 /**
  * 
  */
@@ -49,6 +48,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
 	TObjectPtr<UTextBlock> CooldownText;
 	
+	UPROPERTY(EditDefaultsOnly)
+	FBlueprintNumberFormat CooldownTextFormat; 
 	
 	UPROPERTY()
 	FGameplayTag CooldownTag;
@@ -60,7 +61,7 @@ protected:
 	TObjectPtr<const UEnhancedGameplayAbility> AbilityRef; 
 	
 	
-	void SetAbilityImages(const UEnhancedGameplayAbility& Ability);
+	void SetAbilityImages(const UEnhancedGameplayAbility& Ability) const;
 	
 	
 private: 
@@ -69,7 +70,7 @@ private:
 	void CheckForCooldown(FGameplayTag ChangedTag, int32 NewCount);
 	
 	UFUNCTION()
-	void UpdateActiveWidget(FGameplayTag ChangedTag, int32 NewCount);
+	void UpdateActiveWidget(FGameplayTag ChangedTag, int32 NewCount) const;
 	
 	UFUNCTION()
 	void UpdateCooldownProgress();

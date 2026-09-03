@@ -9,7 +9,9 @@
 class APooledProjectile;
 
 /**
- * 
+ *  This is the settings that will be getting used to define what projectiles are getting pooled in the game
+ *  
+ *  These are found under project settings. Think of this as a helper class for the world subsystem to use to setup correctly 
  */
 UCLASS(Config=Game, DefaultConfig)
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UPooledProjectileSettings : public UDeveloperSettings

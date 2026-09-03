@@ -13,6 +13,7 @@ UFloatingHealthComponent::UFloatingHealthComponent()
 	
 }
 
+
 void UFloatingHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -25,7 +26,7 @@ void UFloatingHealthComponent::BeginPlay()
 		OwningCharacterRef = Character;
 		if (UAbilitySystemComponent* ASC = OwningCharacterRef->GetAbilitySystemComponent())
 		{
-			ESWidget->InitializeStats(ASC); 		
+			ESWidget->InitializeStats(ASC); 	// this is how we get the stat bar to update to owning enemy, instead of pulling from the player
 		}
 	}
 

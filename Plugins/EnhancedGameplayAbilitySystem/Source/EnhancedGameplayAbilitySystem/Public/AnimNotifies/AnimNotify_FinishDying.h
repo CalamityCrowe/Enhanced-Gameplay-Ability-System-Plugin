@@ -7,7 +7,7 @@
 #include "AnimNotify_FinishDying.generated.h"
 
 /**
- * 
+ *  the notify that will signal that the actor has finished dying
  */
 UCLASS()
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UAnimNotify_FinishDying : public UAnimNotify

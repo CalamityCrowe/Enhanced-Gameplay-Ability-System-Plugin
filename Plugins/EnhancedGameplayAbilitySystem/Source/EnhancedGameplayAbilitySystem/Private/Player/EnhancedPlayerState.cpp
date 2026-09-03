@@ -7,8 +7,8 @@
 #include "GAS/Attributes/EnhancedAttributeSet.h"
 
 // for here we are essentially creating the Ability system component that the player will own in the game. 
-// they won't own the ASC themselves, and it means that if our player dies, instead of just creating a new ASC, we can get the new one to use this one as 
-//  it will have all the abilities set up already and means we don't need regrant them eseentially.
+// they won't own the ASC themselves, and it means that if our player dies, instead of just creating a new ASC, we can get the new player to use this one as 
+//  it will have all the abilities set up already and means we don't need regrant them.
 AEnhancedPlayerState::AEnhancedPlayerState()
 {
 	ASC = CreateDefaultSubobject<UEnhancedAbilitySystemComponent>(TEXT("Ability System Component")); 
@@ -16,9 +16,9 @@ AEnhancedPlayerState::AEnhancedPlayerState()
 	
 	AttributeSet = CreateDefaultSubobject<UEnhancedAttributeSet>("Player Attributes");
 	
-	//. for the purposes of here, we just find the tag associated with death and assign it here. 
+	//. for the purposes of here, we just find the tag associated with death and assign it. 
 	// we set erroring to false, as when this loaded on the initial compile, it will say it can't find it
-	// this is due to not being able to find the tag as the asset manager wont have been loaded in at this instant
+	// this is due to not being able to find the tag as the asset manager wont have been loaded in at this point
 	DeadTag = FGameplayTag::RequestGameplayTag(FName("State.Dead"), false); 
 }
 
@@ -83,5 +83,6 @@ void AEnhancedPlayerState::HealthChanged(const FOnAttributeChangeData& Data)
 	if (!IsAlive() && !ASC->HasMatchingGameplayTag(DeadTag))
 	{
 		// still needs a bit of setup
+		// need to handle the player dying function
 	}
 }

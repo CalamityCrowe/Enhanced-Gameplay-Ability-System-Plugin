@@ -34,7 +34,7 @@ void APooledProjectile::SetProjectileDamage(const FGameplayEffectSpecHandle& InD
 
 void APooledProjectile::BeginPlay()
 {
-	DefaultVelocity = ProjectileMovement->Velocity; // instead of exposing another value to the editor, we will use the built in velocity to store a default value
+	DefaultVelocity = ProjectileMovement->Velocity; // instead of exposing another value to the editor, we will use the built-in velocity to store a default value
 	Super::BeginPlay();
 }
 
@@ -58,7 +58,7 @@ void APooledProjectile::OnComponentHit(UPrimitiveComponent* HitComponent, AActor
 	if (OtherActor == GetInstigator()) return; 
 	if (UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(OtherActor))
 	{
-		
+		// where we apply damage to the hit target
 	}
 	SetInUse(false); 
 }

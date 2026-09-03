@@ -13,10 +13,12 @@ class UTextBlock;
 class UImage;
 class USizeBox;
 /**
- * 
+ *  this is a base class for how the widget displaying the current level of the characters is setup.  
+ *  
+ *  needs a rework to be applied for enemy levels, but this is a case of removing the player state grabbing method and passing in the ASC from the owner
  */
 
-UCLASS()
+UCLASS(Abstract, Blueprintable)
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UEnhancedLevelWidget : public UUserWidget
 {
 	GENERATED_UCLASS_BODY()

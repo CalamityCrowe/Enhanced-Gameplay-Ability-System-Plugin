@@ -26,12 +26,15 @@ public:
 	virtual FString GetStaticDescription() const override;
 	
 protected:
+	// for filtering these in the editor so we don't grab all the keys in the blackboard, 
+	// this has been setup in the constructor as we can't use the meta way of handling this 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Keys")
 	FBlackboardKeySelector IdealRangeKey;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Keys")
 	FBlackboardKeySelector TargetKey;
 	
 private:
+	// we cache all these here, so we can terminate the node correctly
 	UPROPERTY()
 	TWeakObjectPtr<AAIController> CachedController;
 	

@@ -9,9 +9,9 @@
 class UTextBlock;
 
 /**
- * 
+ *  the base widget for damage numbers to be rendered. simple text block and play an animation forward
  */
-UCLASS()
+UCLASS(Abstract, BlueprintType, Blueprintable)
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UDamageNumberWidget : public UUserWidget
 {
 	GENERATED_UCLASS_BODY()

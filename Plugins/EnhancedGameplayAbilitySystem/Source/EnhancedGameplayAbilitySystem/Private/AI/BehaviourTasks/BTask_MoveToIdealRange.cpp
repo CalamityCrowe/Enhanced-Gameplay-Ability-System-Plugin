@@ -12,36 +12,42 @@ UBTask_MoveToIdealRange::UBTask_MoveToIdealRange()
 	NodeName = "MoveToIdealRange";
 	bCreateNodeInstance = true;
 	
-	IdealRangeKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTask_MoveToIdealRange, IdealRangeKey));
+	// since we are only wanting float or actor values for the dependant key, this is how we add a filter to these
+	IdealRangeKey.AddFloatFilter(this, GET_MEMBER_NAME_CHECKED(UBTask_MoveToIdealRange, IdealRangeKey)); 
 	TargetKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTask_MoveToIdealRange, TargetKey), AActor::StaticClass());
 }
 
 EBTNodeResult::Type UBTask_MoveToIdealRange::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	const UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent(); 
+	// we grab the relevant components for the blackboard, along with caching the AI controller/behaviour tree
+	const UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();  
 	CachedComp = &OwnerComp; 
 	CachedController = OwnerComp.GetAIOwner();
 	
-	if (!CachedController.Get() || !BlackboardComponent) return EBTNodeResult::Failed;
+	// if any of these conditions return as false, we exit out of this node as a fail
+	if (!CachedController.Get() || !BlackboardComponent) return EBTNodeResult::Failed; 
 	if (IdealRangeKey.SelectedKeyName.IsNone() || TargetKey.SelectedKeyName.IsNone()) return EBTNodeResult::Failed;
 	
-	float AcceptanceRadius = BlackboardComponent->GetValueAsFloat(IdealRangeKey.SelectedKeyName); 
-	AActor* TargetActor = Cast<AActor>(BlackboardComponent->GetValueAsObject(TargetKey.SelectedKeyName));
+	// we grab values we will be working with for the node from the blackboard
+	const float AcceptanceRadius = BlackboardComponent->GetValueAsFloat(IdealRangeKey.SelectedKeyName); 
+	const AActor* TargetActor = Cast<AActor>(BlackboardComponent->GetValueAsObject(TargetKey.SelectedKeyName));
 	if (!TargetActor)return EBTNodeResult::Failed;
 	
+	// setting up the AI parameters for handling the moving to the target
 	FAIMoveRequest Request;
 	Request.SetGoalActor(TargetActor);
 	Request.SetAcceptanceRadius(AcceptanceRadius);
 	Request.SetCanStrafe(false); 
 	Request.SetUsePathfinding(true);
 	
+	// we send the request to the controller so they can move
 	FPathFollowingRequestResult RequestResult = CachedController->MoveTo(Request);
+	
+	// we lastly check, what we want to do when the request has been processed by the controller
 	switch (RequestResult.Code)
 	{
 	case EPathFollowingRequestResult::RequestSuccessful:
-		
-		CachedID = RequestResult.MoveId; 
-		
+		CachedID = RequestResult.MoveId; // this will be the ID that we will be using to check for when the move has been completed
 		CachedController->ReceiveMoveCompleted.AddDynamic(this, &UBTask_MoveToIdealRange::MoveCompleted); 
 		return EBTNodeResult::InProgress; 
 		
@@ -49,16 +55,16 @@ EBTNodeResult::Type UBTask_MoveToIdealRange::ExecuteTask(UBehaviorTreeComponent&
 		return EBTNodeResult::Succeeded; 
 	default:
 		return EBTNodeResult::Failed;
-		;
 	}
 }
 
+// standard aborting for the task, we will stop the movement and clear any delegates so we don't have the same finished move function bound multiple times
 EBTNodeResult::Type UBTask_MoveToIdealRange::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (AAIController* AIController = OwnerComp.GetAIOwner())
+	if (CachedController.Get())
 	{
-		AIController->StopMovement(); 
-		AIController->ReceiveMoveCompleted.RemoveDynamic(this, &UBTask_MoveToIdealRange::MoveCompleted);
+		CachedController->StopMovement(); 
+		CachedController->ReceiveMoveCompleted.RemoveDynamic(this, &UBTask_MoveToIdealRange::MoveCompleted);
 	}
 	return EBTNodeResult::Aborted;
 }
@@ -71,6 +77,8 @@ FString UBTask_MoveToIdealRange::GetStaticDescription() const
 		*IdealRangeKey.SelectedKeyName.ToString());
 }
 
+// what we want to happen when the movement is completed, in this instance we check if the cached ID matches the request ID
+// if so, it will remove the complete request and tells the node whether it failed or not getting to the target
 void UBTask_MoveToIdealRange::MoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
 	if (RequestID != CachedID)return;

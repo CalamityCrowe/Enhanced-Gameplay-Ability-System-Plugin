@@ -18,7 +18,7 @@ UBTask_ActivateAbilityByTag::UBTask_ActivateAbilityByTag()
 	
 }
 
-// we check if the owning character is owning an Ability component,
+// we check if the owning character has an Ability component,
 // if so we will check all the activatable abilities they can have and check if the asset tags match the ability we are wanting to activate
 EBTNodeResult::Type UBTask_ActivateAbilityByTag::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {

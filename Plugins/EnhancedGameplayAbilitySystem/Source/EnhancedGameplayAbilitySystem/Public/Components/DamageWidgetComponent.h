@@ -18,7 +18,8 @@ public:
 	UDamageWidgetComponent();
 	
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	virtual void DestroyComponent(bool bPromoteChildren = false) override;
 	
 	void SetDamageText(const float InDamage);
 
@@ -40,13 +41,13 @@ protected:
 	// renaming this later
 	FTimerHandle LiveTimer;
 	
-	FTimerHandle LookAtTimer;
+	FTimerHandle MoveTimer; 
+	
 	
 	FVector MoveDirection;
 	
 	UPROPERTY()
 	USceneComponent* LookAtComponent; 
-	
 	
 	void MoveWidget(); 
 	

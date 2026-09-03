@@ -72,6 +72,7 @@ void AAICharacterBase::FinishDying()
 	Super::FinishDying();
 }
 
+// deciding how fast the ai should move for the current branch
 void AAICharacterBase::SetMovementSpeed_Implementation(EMovementSpeed& SpeedMode, float& MovementSpeed)
 {
 	UCharacterMovementComponent* CMC = GetCharacterMovement(); 
@@ -91,6 +92,7 @@ void AAICharacterBase::SetMovementSpeed_Implementation(EMovementSpeed& SpeedMode
 	CMC->MaxWalkSpeed = MovementSpeed;
 }
 
+// the ideal combat parameters for performing an action such as minimum attack range or how far to move away from the character to feel safe
 void AAICharacterBase::GetIdealRange_Implementation(float& OutAttackRange, float& OutDefendRange) const
 {
 	OutAttackRange = AICombatParameters.AttackRange; 

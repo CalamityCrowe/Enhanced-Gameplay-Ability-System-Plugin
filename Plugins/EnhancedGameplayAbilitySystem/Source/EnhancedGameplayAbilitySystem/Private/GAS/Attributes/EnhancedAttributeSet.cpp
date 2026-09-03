@@ -12,7 +12,7 @@
 
 
 UEnhancedAttributeSet::UEnhancedAttributeSet():Health(100.0f), MaxHealth(100.f), Damage(0.0f), Shield(100), MaxShield(100)
-,XP(0.f), MaxXP(3.f), Level(1.f), XPGained(0.0f), XPBounty(5)
+,XP(0.f), MaxXP(3.f),  XPGained(0.0f), XPBounty(5), Level(1.0f)
 {
 	HitDirectionFrontTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Front"), false); 
 	HitDirectionBackTag = FGameplayTag::RequestGameplayTag(FName("Effect.HitReact.Back"), false); 
@@ -37,7 +37,7 @@ void UEnhancedAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribu
 	}
 	else if(Attribute == GetXPAttribute() || Attribute == GetMaxXPAttribute())
 	{
-		NewValue = FMath::Max(NewValue, 0);
+		NewValue = FMath::Max(NewValue, 0); // ensures that aren't putting the XP into a negative value
 	}
 	else if(Attribute == GetLevelAttribute())
 	{
@@ -99,11 +99,22 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 			SourceActor = Context.GetEffectCauser();
 		}
 	}
+	
+#pragma region Handling Attributes
+	
+	/*
+	 * Here is we will be handling all the attributes that are normally associated with characters in any games
+	 * for this, the main focus is how do we actually apply damage to the character, what order it affects these attributes and what do we do
+	 * when the character actually dies. 
+	 * 
+	 * along side this, there is a basic level up system that will decide if the character is ready to level up.
+	 * Outside of these it is the generic clamping of attributes to ensure they can't go out of bounds
+	 */
 	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
 	{
 		// we grab the damage to store in a temp location, then we reset it, to prevent different damages from applying more than they need to 
 		float LocalDamage = GetDamage(); 
-		const float DisplayDamage = LocalDamage;
+		const float DisplayDamage = LocalDamage; // this is used for displaying damage numbers when they are hit
 		SetDamage(0.0f);
 		
 		// we will check if there is a damage value that is greater than 0 so we don't process irrelevant hit react
@@ -175,37 +186,43 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 				{
 					if (SourceController != TargetController)
 					{
+						// took this from traneks documentations
+						
+						// we are creating a blank gameplay effect to use as a template to populate with modifiers
+						// the transient package is used here as it is a temporary file that we will be discarding once we are done with it
 						UGameplayEffect* GEBounty = NewObject<UGameplayEffect>(GetTransientPackage(), FName("Bounty"));
 						GEBounty->DurationPolicy = EGameplayEffectDurationType::Instant; 
 						
+						// we grab how many modifiers we have in the effect(should be 0 here) and add a fixed value to it for the number of moddifers
+						// in this case it will only be one as we are only adding to the XPGained attribute
 						const int32 Idx = GEBounty->Modifiers.Num(); 
-						GEBounty->Modifiers.SetNum(Idx +1);
+ 						GEBounty->Modifiers.SetNum(Idx +1);
 						
+						// from here we can make a modifier info that will setup how we want it to behave and where it is getting the values from
+						// here he are grabbing the XP bounty (this will be from the target) for the value and setting it to additive
+						// to be applied to the XPGained attribute
 						FGameplayModifierInfo& InfoXP = GEBounty->Modifiers[Idx];
-						FScalableFloat Test = FScalableFloat(GetXPBounty());
-						
 						InfoXP.ModifierMagnitude = FScalableFloat(GetXPBounty());
 						InfoXP.ModifierOp = EGameplayModOp::Additive; 
 						InfoXP.Attribute = UEnhancedAttributeSet::GetXPGainedAttribute(); 
 						
 						
-						Source->ApplyGameplayEffectToSelf(GEBounty,1.0f, Source->MakeEffectContext()); 
+						Source->ApplyGameplayEffectToSelf(GEBounty,1.0f, Source->MakeEffectContext());  // lastly, we will be applying this to the source
 					}
 				} 
-				
 			}
-			
-			
 		}
 	}
+	// checks if the current attribute that is getting changed is XPGained
 	else if (Data.EvaluatedData.Attribute == GetXPGainedAttribute())
 	{
-		const float LocalXPGained = GetXPGained();
+		// grab the gained amount and the current xp locally so we can make changes to the values
+		const float LocalXPGained = GetXPGained(); 
 		const float LocalXP = GetXP(); 
-		SetXPGained(0.0f); 
+		SetXPGained(0.0f);  // resets the XP gained so it doesn't accumulate over, similar concept to damage
 
 		SetXP(LocalXP + LocalXPGained);
-		if (LocalXP + LocalXPGained > GetMaxXP())
+		if ((LocalXP + LocalXPGained) > GetMaxXP()) // Checks if the new XP is greater than the max XP and if so, we trigger the level up function
 		{
 			TriggerLevelUp(); 
 		}
@@ -219,9 +236,10 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 		SetShield(FMath::Clamp(GetShield(), 0.0f, GetMaxShield())); 
 	}
 	// will do something later with this
-	
+#pragma endregion 
 }
 
+#pragma region  Rep notifications
 void UEnhancedAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -270,16 +288,16 @@ void UEnhancedAttributeSet::OnRep_Level(const FGameplayAttributeData& OldData)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEnhancedAttributeSet, Level, OldData);
 }
+#pragma endregion
 
-
-// going to look at this later as I am not certain I like this and not to sure of the setup I am going for 
 void UEnhancedAttributeSet::TriggerLevelUp()
 {
+	// we grab the XP at the start,subtract the MaxXP to get the overflow amount and set the XP to the overflow 
 	const float LocalXP = GetXP(); 
 	const float Difference = LocalXP - GetMaxXP();
 	SetXP(Difference);
-	SetLevel(FMath::RoundToInt(GetLevel())+1);
-		// make this function recursive
+	SetLevel(FMath::RoundToInt(GetLevel())+1); // we increase the current characters level by 1
+	
 	// we can grab the curve from the source object by defining the MaxXP curve in there?
 	// means passing in the source object as a reference, so we can grab the XP curve
 	

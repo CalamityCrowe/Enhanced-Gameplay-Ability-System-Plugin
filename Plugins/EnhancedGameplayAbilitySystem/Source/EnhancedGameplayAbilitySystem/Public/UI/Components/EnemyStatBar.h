@@ -9,7 +9,7 @@
 
 class UProgressBar;
 /**
- * 
+ *  THIS NEED TO INHERIT FROM THE BASE ENHANCED ATTRIBUTE INSTEAD
  */
 UCLASS(Abstract, HideDropdown)
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UEnemyStatBar : public UUserWidget

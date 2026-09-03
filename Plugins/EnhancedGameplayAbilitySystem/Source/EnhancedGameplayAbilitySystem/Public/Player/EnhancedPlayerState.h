@@ -10,6 +10,7 @@
 
 class UEnhancedAbilitySystemComponent;
 class UEnhancedAttributeSet;
+struct FOnAttributeChangeData; // why this needs to be forward declared now, I have no idea but the compiler bitches about it now (3rd September 2026)
 /**
  * 
  */

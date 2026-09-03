@@ -31,7 +31,7 @@ public:
 	
 private: 
 	
-	// we mark these with UPROPERTY so the garbace collector doesn't remove them
+	// we mark these with UPROPERTY so the garbage collector doesn't remove them
 	UPROPERTY()
 	UBehaviorTreeComponent* OwnerCompRef;
 	

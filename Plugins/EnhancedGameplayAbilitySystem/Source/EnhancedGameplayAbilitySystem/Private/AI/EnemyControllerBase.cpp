@@ -25,7 +25,7 @@ void AEnemyControllerBase::StopBehaviourTree()
 	if (UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(BrainComponent))
 	{
 #if WITH_EDITOR
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Purple,"Behavior tree stopped running"); 
+		UE_LOG(LogTemp, Warning,TEXT("%s: Behaviour Tree stopped running"), *GetName()) 
 #endif
 		BTComp->StopTree(); 
 	}
@@ -39,22 +39,26 @@ EAIStates AEnemyControllerBase::GetCurrentState() const
 void AEnemyControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	if (BehaviourTree)
+	if (!BehaviourTree) return; 
+	RunBehaviorTree(BehaviourTree);
+	
+	// we want to grab the attack radius and defend radius of the enemy, we make temp values so we aren't storing these 
+	// since they are one off grabs for the controller
+	if (GetPawn()->GetClass()->ImplementsInterface(UEnemyAIInterface::StaticClass()))
 	{
-		RunBehaviorTree(BehaviourTree);
-		
-		if (GetPawn()->GetClass()->ImplementsInterface(UEnemyAIInterface::StaticClass()))
-		{
-			float TempAttackRadius;
-			float TempDefendRadius;
-			AActor* Actor = GetPawn(); 
-			IEnemyAIInterface::Execute_GetIdealRange(Actor, TempAttackRadius, TempDefendRadius);
-			Blackboard->SetValueAsFloat(AttackRadiusKeyName, TempAttackRadius); 
-			Blackboard->SetValueAsFloat(DefendRadiusKeyName, TempDefendRadius);
-		}
+		float TempAttackRadius;
+		float TempDefendRadius;
+		const AActor* Actor = GetPawn(); 
+		IEnemyAIInterface::Execute_GetIdealRange(Actor, TempAttackRadius, TempDefendRadius);
+		Blackboard->SetValueAsFloat(AttackRadiusKeyName, TempAttackRadius); 
+		Blackboard->SetValueAsFloat(DefendRadiusKeyName, TempDefendRadius);
 	}
+	
 }
 
+// whenever a new stimulus is updated on the perception component, this function is called 
+// depending on what that stimulus is depends on how we handle that. in this case we are only checking if it was the sight, hearing or taking damage that was detected
+// the idea is to loop through all the actors it has found and then when it has found a matching sense, it will update this and then move onto the next actor 
 void AEnemyControllerBase::UpdatePerception(const TArray<AActor*>& Actors)
 {
 	bool bSensed = false; 
@@ -84,13 +88,17 @@ void AEnemyControllerBase::UpdatePerception(const TArray<AActor*>& Actors)
 	
 }
 
+// this is how we go about checking what sense it was that detected the character
 void AEnemyControllerBase::CanSenseActor(AActor* Actor, EAISenses SenseType, bool& OutSensed, FAIStimulus& OutStimulus)
 {
+	// first we grab the perception information from the perception component, as this will be what is getting used to determine what sense was detected
 	FActorPerceptionBlueprintInfo PerceptionInfo;
 	AIPerception->GetActorsPerception(Actor, PerceptionInfo); 
-	for (const FAIStimulus& Stimulus: PerceptionInfo.LastSensedStimuli)
+	for (const FAIStimulus& Stimulus: PerceptionInfo.LastSensedStimuli) // .we loop through all the percived perceptions, as there could be multiple senses triggered
 	{
-		TSubclassOf<UAISense> FoundSense = UAIPerceptionSystem::GetSenseClassForStimulus(GetWorld(), Stimulus);
+		TSubclassOf<UAISense> FoundSense = UAIPerceptionSystem::GetSenseClassForStimulus(GetWorld(), Stimulus); // we use the subclass to check what sense was triggered
+		
+		// we do a switch only for the sense we are looking for, and if that sense is true we set the out stimulus to the one found
 		switch (SenseType)
 		{
 		case EAISenses::Sight:
@@ -120,6 +128,7 @@ void AEnemyControllerBase::CanSenseActor(AActor* Actor, EAISenses SenseType, boo
 	}
 }
 
+// if the character was seen, this is how we handle what we do in each state for the AI
 void AEnemyControllerBase::HandleSensedSight(AActor* Actor, const FAIStimulus& Stimulus)
 {
 	switch (GetCurrentState())
@@ -136,6 +145,7 @@ void AEnemyControllerBase::HandleSensedSight(AActor* Actor, const FAIStimulus& S
 	}
 }
 
+// what we want to do when the AI has "heard" something
 void AEnemyControllerBase::HandleSensedSound(const FVector& SoundLocation)
 {
 	switch (GetCurrentState())

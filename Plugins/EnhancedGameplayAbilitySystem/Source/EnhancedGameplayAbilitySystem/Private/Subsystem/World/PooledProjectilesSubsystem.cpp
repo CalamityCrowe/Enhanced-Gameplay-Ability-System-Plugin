@@ -8,6 +8,8 @@
 #include "Actors/ObjectPool/PooledProjectile.h"
 #include "EditorFiles/PooledProjectileSettings.h"
 
+
+// when we initialise the pool, we reset the previous pool and then pool the relevant information from the developer settings  
 void UPooledProjectilesSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
@@ -26,6 +28,8 @@ void UPooledProjectilesSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
+// when we spawn from the pool, we will grab the first available projectile to be returned. 
+// At this point we don't set in use as there will still be properties needing to be set (Damage, Gameplay effects)
 APooledProjectile* UPooledProjectilesSubsystem::SpawnFromPool(const FTransform& SpawnTransform)
 {
 	// I wont set in use here, as we might need to do something specific with the projectile when we are using it
@@ -38,6 +42,7 @@ APooledProjectile* UPooledProjectilesSubsystem::SpawnFromPool(const FTransform& 
 	return nullptr;
 }
 
+// for finding the first available actor, we return the first actor not in use
 APooledProjectile* UPooledProjectilesSubsystem::FindFirstAvailableProjectile()
 {
 	for (APooledProjectile* PooledActor : PooledProjectiles)
@@ -49,6 +54,7 @@ APooledProjectile* UPooledProjectilesSubsystem::FindFirstAvailableProjectile()
 	}
 	return nullptr;
 }
+
 
 void UPooledProjectilesSubsystem::InitializePool()
 {
@@ -70,6 +76,7 @@ void UPooledProjectilesSubsystem::InitializePool()
 	}
 }
 
+// we only run this subsystem if it is in the game or play-in-editor
 bool UPooledProjectilesSubsystem::DoesSupportWorldType(const EWorldType::Type WorldType) const
 {
 	return WorldType == EWorldType::PIE || WorldType == EWorldType::Game;

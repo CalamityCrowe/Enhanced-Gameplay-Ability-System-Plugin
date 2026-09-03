@@ -3,6 +3,7 @@
 
 //plugin 
 #include "Actors/ObjectPool/PooledProjectile.h"
+
 UPooledProjectileSettings::UPooledProjectileSettings(const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
 {
 	// this will be the main setting for where it is stored on the left hand side

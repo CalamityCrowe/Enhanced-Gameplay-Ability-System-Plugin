@@ -18,7 +18,6 @@ void UAnimNotifyState_HitScanWindow::NotifyBegin(USkeletalMeshComponent* MeshCom
 	float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
-	
 	FGameplayEventData Payload;
 	if (bUseSkeletonForCollision)
 	{

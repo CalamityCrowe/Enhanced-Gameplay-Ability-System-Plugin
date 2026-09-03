@@ -24,8 +24,6 @@ void UAnimNotifyState_ComboWindow::NotifyBegin(USkeletalMeshComponent* MeshComp,
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshComp->GetOwner(),ComboStartTag,FGameplayEventData()); 
-	
-	
 }
 
 void UAnimNotifyState_ComboWindow::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
@@ -34,7 +32,6 @@ void UAnimNotifyState_ComboWindow::NotifyEnd(USkeletalMeshComponent* MeshComp, U
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshComp->GetOwner(),ComboEndTag,FGameplayEventData()); 
-	
 }
 
 FString UAnimNotifyState_ComboWindow::GetNotifyName_Implementation() const

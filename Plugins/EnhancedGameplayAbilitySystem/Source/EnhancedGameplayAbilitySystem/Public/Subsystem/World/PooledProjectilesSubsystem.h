@@ -7,10 +7,10 @@
 #include "PooledProjectilesSubsystem.generated.h"
 
 /**
- * 
+ *  since there will be some kind of projectiles in every level, we use this subsystem as the projectile pool manager
+ *  
+ *  this means that we don't need to worry about the pool being invalid when we load the world.
  */
-
-
 class APooledProjectile;
 
 UCLASS()
@@ -24,6 +24,7 @@ public:
 	
 	virtual void Deinitialize() override;
 	
+	// this is the function that we will be using to handle getting from the pool
 	APooledProjectile* SpawnFromPool(const FTransform& SpawnTransform); 
 	
 protected: 

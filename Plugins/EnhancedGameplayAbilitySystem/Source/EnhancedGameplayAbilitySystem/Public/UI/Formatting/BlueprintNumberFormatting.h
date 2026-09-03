@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "BlueprintNumberFormatting.generated.h"
 
+// this is a helper struct to make the standard number formatter essentially exposed without rewriting a part of the engine
 USTRUCT(BlueprintType)
 struct FBlueprintNumberFormat
 {
@@ -26,6 +27,7 @@ struct FBlueprintNumberFormat
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Formatting", meta = (ClampMin = 0, UIMin = 0))
 	int32 MaximumFractionalDigits = 0;
 	
+	// this is a function built into the struct so we can get the actual version of the number formatting in the engine
 	FNumberFormattingOptions ToNativeOptions() const
 	{
 		FNumberFormattingOptions Native; 
@@ -42,11 +44,10 @@ struct FBlueprintNumberFormat
 };
 
 UCLASS()
-
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API UTextFormattingHelper : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintPure, Category = "Formatting")
+	UFUNCTION(BlueprintPure, Category = "Formatting", meta = (ToolTip = "This will take the Blueprint number formatter and return the engine variant"))
 	static FText FormatFloatWithCustomOptions(float Value, const FBlueprintNumberFormat& Options); 
 };

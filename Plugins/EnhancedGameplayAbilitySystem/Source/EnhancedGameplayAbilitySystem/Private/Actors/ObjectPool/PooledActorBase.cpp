@@ -15,6 +15,7 @@ void APooledActorBase::BeginPlay()
 	SetInUse(false); 
 }
 // we do all the standard can we see it and does the collisions work atm for the actor here
+// if we are implementing particles and such in a later class, this is the one that we override for that
 void APooledActorBase::SetInUse(bool InUse)
 {
 	bInUse = InUse;
@@ -28,6 +29,7 @@ void APooledActorBase::SetInUse(bool InUse)
 	}
 	
 }
+// when it says return, it essentially means turning everything off
 void APooledActorBase::ReturnToPool()
 {
 	SetInUse(false);

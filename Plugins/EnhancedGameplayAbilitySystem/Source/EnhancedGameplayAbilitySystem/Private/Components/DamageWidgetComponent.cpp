@@ -7,7 +7,7 @@
 
 UDamageWidgetComponent::UDamageWidgetComponent(): TimeToLive(0.1f)
 {
-	SetWidgetSpace(EWidgetSpace::World); 
+	SetWidgetSpace(EWidgetSpace::World); // in editor, the sample component has this set as scene  
 	SetDrawSize(FVector2D(200.f,200.f));
 	SetTwoSided(false); 
 	SetVisibility(true); 
@@ -17,19 +17,16 @@ UDamageWidgetComponent::UDamageWidgetComponent(): TimeToLive(0.1f)
 void UDamageWidgetComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	
 	MoveDirection = UKismetMathLibrary::RandomUnitVector();
 	MoveSpeed = UKismetMathLibrary::RandomFloatInRange(MinMoveSpeed, MaxMoveSpeed);
+	GetWorld()->GetTimerManager().SetTimer(MoveTimer,this, &UDamageWidgetComponent::MoveWidget, 1.f/60.f, true);
 }
 
-void UDamageWidgetComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+void UDamageWidgetComponent::DestroyComponent(bool bPromoteChildren)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	SetWorldLocation(GetComponentLocation() + MoveDirection);
+	GetWorld()->GetTimerManager().ClearTimer(MoveTimer);
+	Super::DestroyComponent(bPromoteChildren);
 }
-
 
 void UDamageWidgetComponent::SetDamageText(const float InDamage)
 {
@@ -38,8 +35,12 @@ void UDamageWidgetComponent::SetDamageText(const float InDamage)
 	DamageNumberWidget->SetDamageNumberText(InDamage);
 	GetWorld()->GetTimerManager().SetTimer(LiveTimer,[this]()
 	{
-		GetWorld()->GetTimerManager().ClearTimer(LookAtTimer);
 		DestroyComponent();
 	}, TimeToLive, false); 
+}
+
+void UDamageWidgetComponent::MoveWidget()
+{
+	SetWorldLocation(GetComponentLocation() + MoveDirection);
 }
 

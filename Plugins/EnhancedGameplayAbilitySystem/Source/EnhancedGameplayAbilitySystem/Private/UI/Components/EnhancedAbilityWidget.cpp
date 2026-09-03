@@ -43,7 +43,8 @@ void UEnhancedAbilityWidget::NativeConstruct()
 	
 }
 
-void UEnhancedAbilityWidget::SetAbilityImages(const UEnhancedGameplayAbility& Ability)
+// setting up the display of the widget for the ability here, essentially just grabs the icon for the ability and what colour each state should be 
+void UEnhancedAbilityWidget::SetAbilityImages(const UEnhancedGameplayAbility& Ability) const
 {
 	UAbilityHUDData* AbilityHUDData = Ability.GetHUDData(); 
 	if (!AbilityHUDData)return; 
@@ -61,11 +62,12 @@ void UEnhancedAbilityWidget::SetAbilityImages(const UEnhancedGameplayAbility& Ab
 	CooldownOverlay->SetVisibility(ESlateVisibility::Collapsed);
 }
 
+// when the ability goes on cooldown, a timer is set that decreases that is checked at a fixed time of a tenth of a second
 void UEnhancedAbilityWidget::CheckForCooldown(FGameplayTag ChangedTag, int32 NewCount)
 {
 	if (!AbilityRef) return; 
-	float Remaining = AbilityRef->GetCooldownTimeRemaining(); 
-	bool bIsTimerActive  = GetWorld()->GetTimerManager().IsTimerActive(CooldownTimerHandle); 
+	const float Remaining = AbilityRef->GetCooldownTimeRemaining(); 
+	const bool bIsTimerActive  = GetWorld()->GetTimerManager().IsTimerActive(CooldownTimerHandle); 
 	
 	if (Remaining> 0 && !bIsTimerActive)
 	{
@@ -74,12 +76,14 @@ void UEnhancedAbilityWidget::CheckForCooldown(FGameplayTag ChangedTag, int32 New
 	}
 }
 
-void UEnhancedAbilityWidget::UpdateActiveWidget(FGameplayTag ChangedTag,int32 NewCount )
+// checks if the ability is active based on the tag. if so it will render the active widget
+void UEnhancedAbilityWidget::UpdateActiveWidget(FGameplayTag ChangedTag,int32 NewCount ) const
 {
 	const ESlateVisibility NewVisibility = NewCount > 0? ESlateVisibility::Visible : ESlateVisibility::Collapsed;
 	ActiveOverlay->SetVisibility(NewVisibility);
 }
 
+// we update how long is remaining before we can use the ability again, once it is off cooldown, the widget will indicate it is available again 
 void UEnhancedAbilityWidget::UpdateCooldownProgress()
 {
 	if (!AbilityRef) return; 
@@ -87,16 +91,8 @@ void UEnhancedAbilityWidget::UpdateCooldownProgress()
 	
 	if (RemainingCooldown > 0.0f)
 	{
-		FNumberFormattingOptions CooldownTextFormat;
-		CooldownTextFormat.SetUseGrouping(true);
-		CooldownTextFormat.RoundingMode = HalfToEven; 
-		CooldownTextFormat.MinimumIntegralDigits= 1;
-		CooldownTextFormat.MaximumIntegralDigits= 2;
-		CooldownTextFormat.MinimumFractionalDigits = 0;
-		CooldownTextFormat.MaximumFractionalDigits = 1;
-
-		const FText AsText = FText::AsNumber(RemainingCooldown, &CooldownTextFormat);
-		CooldownText->SetText(AsText); 
+		const FText TempCooldownText = UTextFormattingHelper::FormatFloatWithCustomOptions(RemainingCooldown, CooldownTextFormat);
+		CooldownText->SetText(TempCooldownText); 
 	}
 	else
 	{

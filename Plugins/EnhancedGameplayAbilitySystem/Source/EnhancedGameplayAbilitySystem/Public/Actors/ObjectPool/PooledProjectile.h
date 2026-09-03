@@ -10,10 +10,7 @@
 class UProjectileMovementComponent;
 class USphereComponent;
 
-/*
-	this is still a test class for checking if 	
-
-*/
+// STILL NEEDS TESTED TO SEE IF IT WORKS
 
 UCLASS()
 class ENHANCEDGAMEPLAYABILITYSYSTEM_API APooledProjectile : public APooledActorBase

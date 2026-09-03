@@ -21,9 +21,7 @@ class ENHANCEDGAMEPLAYABILITYSYSTEM_API UBTask_ActivateAbilityByTag : public UBT
 	GENERATED_BODY()
 public: 
 	UBTask_ActivateAbilityByTag(); 
-	
-	
-	
+
 protected:
 	
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
@@ -31,6 +29,7 @@ protected:
 	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
 	void OnAbilityEnded(UGameplayAbility* Ability); 
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (Categories = "Ability"), category = "Ability")
 	FGameplayTag AbilityTag;

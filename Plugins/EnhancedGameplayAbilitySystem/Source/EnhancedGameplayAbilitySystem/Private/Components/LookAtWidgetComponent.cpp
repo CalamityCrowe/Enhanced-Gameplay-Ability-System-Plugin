@@ -8,9 +8,7 @@
 
 ULookAtWidgetComponent::ULookAtWidgetComponent()
 {
-
 	PrimaryComponentTick.bCanEverTick = true;
-	
 }
 
 void ULookAtWidgetComponent::DestroyComponent(bool bPromoteChildren)
@@ -19,7 +17,7 @@ void ULookAtWidgetComponent::DestroyComponent(bool bPromoteChildren)
 	Super::DestroyComponent(bPromoteChildren);
 }
 
-// need to look at this to see if I can mark it as const and get rid of member variable
+// this will set a timer that will set the Widget to llok towards the target that has been set
 void ULookAtWidgetComponent::SetLookAtTarget(USceneComponent* InTarget)
 {
 	LookAtTarget = InTarget;
