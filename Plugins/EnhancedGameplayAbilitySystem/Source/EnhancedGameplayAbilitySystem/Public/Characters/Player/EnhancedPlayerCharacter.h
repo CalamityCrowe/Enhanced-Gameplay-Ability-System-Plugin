@@ -9,8 +9,10 @@
 class UCameraComponent;
 class USpringArmComponent;
 class UEnhancedInputConfig;
+class UGameplayEffect; 
 
-// since this is a reference to how we might want to implement a player character, this one is a setup for third person characters instead
+
+// since this is a reference to how we might want to implement a player character, this one is a setup for third person characters. 
 // if we were doing a first person, we would give another mesh here that hides itself to other players and is visible to the owning player 
 // so the hands are in the correct place. would look at the first-person shooter sample project for a reference
 
@@ -27,6 +29,8 @@ public:
 	
 	virtual void Die() override;
 	virtual void FinishDying() override;
+	
+	
 	
 protected:
 
@@ -51,6 +55,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UCameraComponent> Camera;
 	
+
 private: 
 	
 	UFUNCTION()

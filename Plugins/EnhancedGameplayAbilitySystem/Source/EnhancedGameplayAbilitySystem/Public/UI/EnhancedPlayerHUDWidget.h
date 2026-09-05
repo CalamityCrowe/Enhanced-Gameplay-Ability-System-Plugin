@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "EnhancedPlayerHUDWidget.generated.h"
 
+class UAbilitySystemComponent;
 class UEnhancedLevelWidget;
 class UEnhancedStatBar;
 /**
@@ -20,11 +21,15 @@ public:
 	
 	virtual void NativeDestruct() override;
 	
+	virtual void InitializeAttributeListening(UAbilitySystemComponent* InASC); 
+	
 protected: 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<UEnhancedStatBar> HealthBar; 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<UEnhancedStatBar> ShieldBar;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<UEnhancedStatBar> EXPBar; 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<UEnhancedLevelWidget> LevelIcon;
 };

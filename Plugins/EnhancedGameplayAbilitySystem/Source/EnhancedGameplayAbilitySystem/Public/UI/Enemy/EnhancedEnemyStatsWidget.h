@@ -7,7 +7,7 @@
 #include "EnhancedEnemyStatsWidget.generated.h"
 
 
-class UEnemyStatBar;
+class UEnhancedStatBar;
 class UAbilitySystemComponent;
 class UHorizontalBox;
 class USizeBox;
@@ -36,6 +36,6 @@ protected:
 	TObjectPtr<UVerticalBox> StatsContainer;
 	
 	UPROPERTY(EditDefaultsOnly, meta = (BindWidget))
-	TObjectPtr<UEnemyStatBar> HealthBar;
+	TObjectPtr<UEnhancedStatBar> HealthBar;
 	
 };

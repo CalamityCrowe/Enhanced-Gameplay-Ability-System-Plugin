@@ -18,22 +18,23 @@ UEnhancedLevelWidget::UEnhancedLevelWidget(const FObjectInitializer& ObjectIniti
 void UEnhancedLevelWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	if (const AEnhancedPlayerState* PS = GetOwningPlayerState<AEnhancedPlayerState>())
-	{
-		if (UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent())
-		{
-			CachedASC = ASC; // caching the ASC so we can unbind the level change delegate handle
-			FText TempLevelText = UTextFormattingHelper::FormatFloatWithCustomOptions(ASC->GetNumericAttribute(UEnhancedAttributeSet::GetLevelAttribute()), LevelTextFormat);
-			LevelText->SetText(TempLevelText); 
-			LevelChangedHandle = ASC->GetGameplayAttributeValueChangeDelegate(UEnhancedAttributeSet::GetLevelAttribute()).AddUObject(this, &UEnhancedLevelWidget::OnAttributeChanged); 
-		}
-	}
 }
 
 void UEnhancedLevelWidget::NativeDestruct()
 {
-	CachedASC->GetGameplayAttributeValueChangeDelegate(UEnhancedAttributeSet::GetLevelAttribute()).Remove(LevelChangedHandle);
+	if (CachedASC.IsValid())
+	{
+		CachedASC->GetGameplayAttributeValueChangeDelegate(UEnhancedAttributeSet::GetLevelAttribute()).Remove(LevelChangedHandle);
+	}
 	Super::NativeDestruct(); // do this at the end to prevent crashes due to it deleting this widget
+}
+
+void UEnhancedLevelWidget::InitializeAttributeListening(UAbilitySystemComponent* InASC)
+{
+	CachedASC = InASC; // caching the ASC so we can unbind the level change delegate handle
+	FText TempLevelText = UTextFormattingHelper::FormatFloatWithCustomOptions(CachedASC->GetNumericAttribute(UEnhancedAttributeSet::GetLevelAttribute()), LevelTextFormat);
+	LevelText->SetText(TempLevelText); 
+	LevelChangedHandle = CachedASC->GetGameplayAttributeValueChangeDelegate(UEnhancedAttributeSet::GetLevelAttribute()).AddUObject(this, &UEnhancedLevelWidget::OnAttributeChanged); 
 }
 
 void UEnhancedLevelWidget::OnAttributeChanged(const FOnAttributeChangeData& Data)

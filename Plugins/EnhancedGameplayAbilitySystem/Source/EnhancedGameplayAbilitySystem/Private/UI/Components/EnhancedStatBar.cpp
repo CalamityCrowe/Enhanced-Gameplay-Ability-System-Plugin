@@ -18,14 +18,25 @@ UEnhancedStatBar::UEnhancedStatBar(const FObjectInitializer& ObjectInitializer) 
 void UEnhancedStatBar::NativeConstruct()
 {
 	Super::NativeConstruct();
-	if (AEnhancedPlayerState* PS = GetOwningPlayerState<AEnhancedPlayerState>())
+}
+
+void UEnhancedStatBar::NativeDestruct()
+{
+	if (CachedASC.IsValid())
 	{
-		if (UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent())
-		{
-			UpdateStat(ASC);
-			ASC->GetGameplayAttributeValueChangeDelegate(TrackedAttribute).AddUObject(this, &ThisClass::OnAttributeChanged); 
-		}
+		CachedASC->GetGameplayAttributeValueChangeDelegate(TrackedAttribute).Remove(AttributeChangeHandle);
+		CachedASC->GetGameplayAttributeValueChangeDelegate(TrackedMaxAttribute).Remove(MaxAttributeChangeHandle);
 	}
+	Super::NativeDestruct();
+}
+
+void UEnhancedStatBar::InitializeAttributeListening(UAbilitySystemComponent* InASC)
+{
+	if (!InASC || !TrackedAttribute.IsValid() || !TrackedMaxAttribute.IsValid())return;
+	CachedASC = InASC;
+	UpdateStat(CachedASC.Get());
+	AttributeChangeHandle = CachedASC->GetGameplayAttributeValueChangeDelegate(TrackedAttribute).AddUObject(this, &ThisClass::OnAttributeChanged); 
+	MaxAttributeChangeHandle = CachedASC->GetGameplayAttributeValueChangeDelegate(TrackedMaxAttribute).AddUObject(this, &ThisClass::OnAttributeChanged);
 }
 
 // within here, we will grab the current and max value of the attribute we are tracking and update the progress bar and text
@@ -33,6 +44,7 @@ void UEnhancedStatBar::UpdateStat(const UAbilitySystemComponent* ASC)
 {
 	// we check if the ASC is valid before we grab the current tracked stats
 	if (!ASC) return; 
+	
 	
 	CurrentValue = ASC->GetNumericAttribute(TrackedAttribute);
 	MaxValue = ASC->GetNumericAttribute(TrackedMaxAttribute);
@@ -49,8 +61,5 @@ void UEnhancedStatBar::UpdateStat(const UAbilitySystemComponent* ASC)
 // when the attribute changes, we will update the stat bar through this function bound to the delegate
 void UEnhancedStatBar::OnAttributeChanged(const FOnAttributeChangeData& Data)
 {
-	if (AEnhancedPlayerState* PS = GetOwningPlayerState<AEnhancedPlayerState>())
-	{
-		UpdateStat(PS->GetAbilitySystemComponent()); 
-	}
+	UpdateStat(CachedASC.Get());
 }

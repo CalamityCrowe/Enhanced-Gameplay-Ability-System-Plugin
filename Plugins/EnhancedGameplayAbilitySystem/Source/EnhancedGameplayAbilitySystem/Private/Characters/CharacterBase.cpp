@@ -159,6 +159,22 @@ void ACharacterBase::FinishDying()
 	Destroy();  // we destroy the actor here. if we are doing object pooling, we wouldn't destroy them and instead set them not in use
 }
 
+void ACharacterBase::LevelUp()
+{
+	if (!NextLevelEffect || !ASC.Get())
+	{
+#if WITH_EDITOR
+		UE_LOG(LogTemp, Warning, TEXT("%s: Level up effect or Ability System Component not set"), *GetName());
+#endif
+		return;
+	}
+	
+	FGameplayEffectContextHandle EffectContext = ASC->MakeEffectContext(); 
+	EffectContext.AddSourceObject(this); 
+	const FGameplayEffectSpecHandle EffectSpec = ASC->MakeOutgoingSpec(NextLevelEffect, GetCurrentLevel(), EffectContext);
+	ASC->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get()); 
+}
+
 float ACharacterBase::GetHealth() const
 {
 	if (AttributeSet.Get())
@@ -166,6 +182,12 @@ float ACharacterBase::GetHealth() const
 		return AttributeSet->GetHealth(); 
 	}
 	return 0.0f;
+}
+
+int32 ACharacterBase::GetCurrentLevel() const
+{
+	if (!AttributeSet.Get()) return 0;
+	return AttributeSet->GetLevel();
 }
 
 bool ACharacterBase::IsAlive() const

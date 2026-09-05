@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "EnhancedPlayerHUD.generated.h"
 
+class UAbilitySystemComponent;
 class UEnhancedPlayerHUDWidget;
 /**
  * 
@@ -18,11 +19,16 @@ public:
 	AEnhancedPlayerHUD(); 
 	
 	virtual void BeginPlay() override; 
+	
+	virtual void SetAbilitySystemComponent(UAbilitySystemComponent* InASC);
 protected: 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (ToolTip = "We assign the sub class of the player HUD widget here to display current stats on the screen like the player health and such "))
 	TSubclassOf<UEnhancedPlayerHUDWidget> EnhancedPlayerHUDWidgetClass;
 	
 	UPROPERTY()
 	UEnhancedPlayerHUDWidget* PlayerHUDWidget; 
+	
+	UPROPERTY()
+	TWeakObjectPtr<UAbilitySystemComponent> CachedASC;
 	
 };

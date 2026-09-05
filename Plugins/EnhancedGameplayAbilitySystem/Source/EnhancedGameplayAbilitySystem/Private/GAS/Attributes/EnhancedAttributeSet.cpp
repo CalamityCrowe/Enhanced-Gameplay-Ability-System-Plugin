@@ -37,11 +37,11 @@ void UEnhancedAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribu
 	}
 	else if(Attribute == GetXPAttribute() || Attribute == GetMaxXPAttribute())
 	{
-		NewValue = FMath::Max(NewValue, 0); // ensures that aren't putting the XP into a negative value
+		NewValue = FMath::RoundToInt32(FMath::Max(NewValue, 0)); // ensures that aren't putting the XP into a negative value
 	}
 	else if(Attribute == GetLevelAttribute())
 	{
-		NewValue = FMath::Clamp(NewValue,1, 99);
+		NewValue = FMath::RoundToInt32(FMath::Clamp(NewValue,1, 99));
 	}
 	
 }
@@ -224,7 +224,7 @@ void UEnhancedAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffe
 		SetXP(LocalXP + LocalXPGained);
 		if ((LocalXP + LocalXPGained) > GetMaxXP()) // Checks if the new XP is greater than the max XP and if so, we trigger the level up function
 		{
-			TriggerLevelUp(); 
+			TriggerLevelUp(TargetCharacter); // I think this is the target character it is referring to? 
 		}
 	}
 	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
@@ -290,16 +290,16 @@ void UEnhancedAttributeSet::OnRep_Level(const FGameplayAttributeData& OldData)
 }
 #pragma endregion
 
-void UEnhancedAttributeSet::TriggerLevelUp()
+void UEnhancedAttributeSet::TriggerLevelUp(ACharacterBase* Character)
 {
 	// we grab the XP at the start,subtract the MaxXP to get the overflow amount and set the XP to the overflow 
 	const float LocalXP = GetXP(); 
 	const float Difference = LocalXP - GetMaxXP();
 	SetXP(Difference);
 	SetLevel(FMath::RoundToInt(GetLevel())+1); // we increase the current characters level by 1
-	
+	Character->LevelUp();
 	// we can grab the curve from the source object by defining the MaxXP curve in there?
 	// means passing in the source object as a reference, so we can grab the XP curve
 	
-	if (GetXP() >= GetMaxXP()) TriggerLevelUp(); 
+	if (GetXP() >= GetMaxXP()) TriggerLevelUp(Character); 
 }

@@ -3,12 +3,13 @@
 
 #include "Player/EnhancedPlayerController.h"
 // engine
+#include "Camera/CameraComponent.h"
 #include "EnhancedInputSubsystems.h"
 
 // plugin
-#include "Camera/CameraComponent.h"
 #include "Components/DamageWidgetComponent.h"
 #include "GAS/EnhancedAbilitySystemComponent.h"
+#include "Player/EnhancedPlayerHUD.h"
 #include "Player/EnhancedPlayerState.h"
 
 AEnhancedPlayerController::AEnhancedPlayerController()
@@ -31,12 +32,24 @@ void AEnhancedPlayerController::BeginPlay()
 	            }
             }
 	}
+	
+	// the setup for the player HUD to have a reference to the Ability system component so the widgets can be made generic for enemy display as well
+	UAbilitySystemComponent* ASC = GetEnhancedAbilitySystemComponent(); 
+	AEnhancedPlayerHUD* PlayerHUD  = GetHUD<AEnhancedPlayerHUD>();
+	if (!ASC || !PlayerHUD)
+	{
+#if WITH_EDITOR
+		UE_LOG(LogTemp, Warning, TEXT("%s: Grabbing the player HUD or ASC not initialised"), *GetName())
+#endif
+		return; 	
+	}
+	PlayerHUD->SetAbilitySystemComponent(ASC); 
 }
+
 
 void AEnhancedPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	
 }
 
 // we will grab the player state here for this class. Assuming we aren't subclassing the PS outside of the plugin this is fine

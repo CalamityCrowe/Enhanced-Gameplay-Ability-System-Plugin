@@ -10,6 +10,7 @@
 #include  "States/HitDirections.h"
 #include "CharacterBase.generated.h"
 
+class UGameplayEffect;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHitReactDelegate, EHitReactDirection, Direction); 
 
 
@@ -39,6 +40,8 @@ public:
 	void RemoveAbilities(TArray<FGameplayAbilitySpecHandle>AbilitiesToRemove); 
 	
 	float GetHealth() const;
+
+	int32 GetCurrentLevel() const; 
 	
 	bool IsAlive() const; 
 	
@@ -47,6 +50,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void FinishDying(); 
 
+	virtual void LevelUp();
+	
 protected:
 	
 	virtual void BeginPlay() override;
@@ -73,6 +78,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS|Death", meta = (ToolTip = "This tag is what the ASC will be listening for to signal that the character is actually dead"))
 	FGameplayTag DeadTag;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS|Level")
+	TSubclassOf<UGameplayEffect> NextLevelEffect; 
+	
+	
 	FAbilitySet_GrantedHandles GrantedAbilityHandles; 
 	
 	FGameplayTag HitDirectionFront; 
@@ -80,4 +89,6 @@ protected:
 	FGameplayTag HitDirectionLeft; 
 	FGameplayTag HitDirectionRight; 
 		
+	
+	
 };

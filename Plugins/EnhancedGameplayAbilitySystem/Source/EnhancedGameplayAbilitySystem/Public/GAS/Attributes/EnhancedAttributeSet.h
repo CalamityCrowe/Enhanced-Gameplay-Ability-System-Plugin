@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "EnhancedAttributeSet.generated.h"
 
+class ACharacterBase;
 /**
  * 
  */
@@ -89,7 +90,7 @@ protected:
 	virtual void OnRep_Level(const FGameplayAttributeData& OldData); 
 
 	// this is a recursive function where it will keep calling it, until it is no longer able to level
-	virtual void TriggerLevelUp(); 
+	virtual void TriggerLevelUp(ACharacterBase* Character); 
 	
 private: 
 	FGameplayTag HitDirectionFrontTag;

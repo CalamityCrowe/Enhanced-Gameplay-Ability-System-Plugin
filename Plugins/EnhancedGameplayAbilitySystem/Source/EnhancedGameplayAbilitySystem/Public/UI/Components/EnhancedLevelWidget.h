@@ -26,6 +26,8 @@ public:
 	virtual void NativeConstruct() override;
 	
 	virtual void NativeDestruct() override;
+	
+	virtual void InitializeAttributeListening(UAbilitySystemComponent* InASC);
 protected: 
 	
 	virtual void OnAttributeChanged(const FOnAttributeChangeData& Data); 
@@ -44,6 +46,6 @@ private:
 	FDelegateHandle LevelChangedHandle;
 	
 	UPROPERTY()
-	UAbilitySystemComponent* CachedASC;
+	TWeakObjectPtr<UAbilitySystemComponent> CachedASC;
 	
 };

@@ -1,7 +1,7 @@
 
 #include "UI/Enemy/EnhancedEnemyStatsWidget.h"
 
-#include "UI/Components/EnemyStatBar.h"
+#include "UI/Components/EnhancedStatBar.h"
 
 UEnhancedEnemyStatsWidget::UEnhancedEnemyStatsWidget(const FObjectInitializer& Object):Super(Object)
 {
@@ -16,5 +16,5 @@ void UEnhancedEnemyStatsWidget::NativeConstruct()
 void UEnhancedEnemyStatsWidget::InitializeStats(UAbilitySystemComponent* InASC)
 {
 	if (!InASC) return; 
-	HealthBar->InitializeStat(InASC); 
+	HealthBar->InitializeAttributeListening(InASC); 
 }

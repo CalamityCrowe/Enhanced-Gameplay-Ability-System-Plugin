@@ -21,6 +21,9 @@ class ENHANCEDGAMEPLAYABILITYSYSTEM_API UEnhancedStatBar : public UUserWidget
 public: 
 	virtual void NativeConstruct() override;
 	
+	virtual void NativeDestruct() override;
+	
+	virtual void InitializeAttributeListening(UAbilitySystemComponent* InASC);
 protected: 
 	virtual void OnAttributeChanged(const FOnAttributeChangeData& Data); 
 	virtual void UpdateStat(const UAbilitySystemComponent* ASC); 
@@ -39,4 +42,11 @@ protected:
 	
 	float CurrentValue; 
 	float MaxValue;
+	
+private: 
+	UPROPERTY()
+	TWeakObjectPtr<UAbilitySystemComponent> CachedASC;
+	
+	FDelegateHandle AttributeChangeHandle;
+	FDelegateHandle MaxAttributeChangeHandle;
 };
