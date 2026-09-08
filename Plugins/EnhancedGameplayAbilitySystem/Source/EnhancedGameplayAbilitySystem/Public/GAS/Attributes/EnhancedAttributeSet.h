@@ -71,6 +71,8 @@ protected:
 	// after the effect is executed
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 	
+	
+	
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldData); 
 	
