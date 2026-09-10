@@ -6,7 +6,8 @@ This is a plugin that will have extended features of the GAS framework in Unreal
 
 **The current version of Unreal Engine:** 5.7.4
 
-**Currently looking at porting it over to 5.8.2, but this will take time to make sure nothing major has changed between versions: 10th September, 2026**
+> [!NOTE] 
+> Currently looking at porting it over to 5.8.2, but this will take time to make sure nothing major has changed between versions: 10th September, 2026
 
 ## What this plugin aims to achieve
 
