@@ -1,10 +1,21 @@
+# Enhanced Gameplay Ability System Plugin
+
+## Plug-in details
+
 This is a plugin that will have extended features of the GAS framework in Unreal Engine 5
 
-The current version of Unreal Engine: 5.7.4
+**The current version of Unreal Engine:** 5.7.4
 
-Currently looking at porting it over to 5.8.2, but this will take time to make sure nothing major has changed between versions: 10th September, 2026
+**Currently looking at porting it over to 5.8.2, but this will take time to make sure nothing major has changed between versions: 10th September, 2026**
 
-This is a work in progress framework to expand the GAS framework to ensure it is ready to start making games. 
-The idea is to setup the standard attributes we would normally see in games like Health & damage so the boilerplate code associated with these is already setup. Alongside this there is a combat ready attributes and a sample damage calculation already setup to see how we would go about this. 
+## What this plugin aims to achieve
 
+The GAS framework is a bare bones template for beginning to setup different gameplay mechanics. The idea behind this framework is to expand on that drastically so it can be used as a building block for making traditional RPG elements that we would normally find in them. 
 
+some of the features implemented are: 
+* Custom attribute sets for both Combat and Vitals that only communicate through calculations
+* Reworked the Input system to work with tags and native inputs
+* Enemy AI that has GAS implemented along with Behaviour Tree Nodes to activate abilities based on tags
+* UI that can listen to any attribute defined in the editor for scalable UI elements
+* Extended the base abilities to include levelling the abilities and handle events
+ 
