@@ -24,6 +24,6 @@ some of the features implemented are:
 * Reworked the Input system to work with tags and native inputs
 * Enemy AI that has GAS implemented along with Behaviour Tree Nodes to activate abilities based on tags
 * UI that can listen to any attribute defined in the editor for scalable UI elements
-* Extended the base abilities to include levelling the abilities and handle events
+* Extended the base abilities to include levelling the abilities and handle listen events
 
 
