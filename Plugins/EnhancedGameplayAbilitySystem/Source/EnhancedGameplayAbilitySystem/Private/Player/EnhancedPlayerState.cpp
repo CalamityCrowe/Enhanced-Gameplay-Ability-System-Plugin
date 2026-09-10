@@ -5,6 +5,7 @@
 
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "GAS/Attributes/EnhancedAttributeSet.h"
+#include "GAS/Attributes/EnhancedCombatAttributesSet.h"
 
 // for here we are essentially creating the Ability system component that the player will own in the game. 
 // they won't own the ASC themselves, and it means that if our player dies, instead of just creating a new ASC, we can get the new player to use this one as 
@@ -15,7 +16,7 @@ AEnhancedPlayerState::AEnhancedPlayerState()
 	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Full);
 	
 	AttributeSet = CreateDefaultSubobject<UEnhancedAttributeSet>("Player Attributes");
-	
+	CombatAttributeSet = CreateDefaultSubobject<UEnhancedCombatAttributesSet>("Combat Attributes"); 
 	//. for the purposes of here, we just find the tag associated with death and assign it. 
 	// we set erroring to false, as when this loaded on the initial compile, it will say it can't find it
 	// this is due to not being able to find the tag as the asset manager wont have been loaded in at this point
@@ -37,6 +38,15 @@ UEnhancedAttributeSet* AEnhancedPlayerState::GetAttributeSet() const
 	{
 		return AttributeSet;
 	}	
+	return nullptr;
+}
+
+UEnhancedCombatAttributesSet* AEnhancedPlayerState::GetCombatAttributeSet() const
+{
+	if (CombatAttributeSet.Get())
+	{
+		return CombatAttributeSet;
+	}
 	return nullptr;
 }
 

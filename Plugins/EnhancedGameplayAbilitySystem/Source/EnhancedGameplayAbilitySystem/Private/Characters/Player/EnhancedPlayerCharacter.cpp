@@ -6,6 +6,7 @@
 // plugin
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "GAS/Attributes/EnhancedAttributeSet.h"
+#include "GAS/Attributes/EnhancedCombatAttributesSet.h"
 #include "Player/EnhancedPlayerState.h"
 
 
@@ -74,6 +75,7 @@ void AEnhancedPlayerCharacter::PossessedBy(AController* NewController)
 	ASC->InitAbilityActorInfo(this, this); 
 	
 	AttributeSet = PS->GetAttributeSet();  
+	CombatAttributeSet = PS->GetCombatAttributeSet();
 	
 	// in the ability set, we get all the 
 	if (AbilitySet)

@@ -77,5 +77,4 @@ void USampleDamageCalculation::Execute_Implementation(const FGameplayEffectCusto
 	{
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(SampleStatics().DamageProperty, EGameplayModOp::Additive, MitigatedDamage)); 
 	}
-	
 }

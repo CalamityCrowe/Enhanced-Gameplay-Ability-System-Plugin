@@ -21,7 +21,7 @@ public:
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedCombatAttributesSet, Strength)
 	
-	UPROPERTY(BlueprintReadOnly, Category = "Combat Attribute", ReplicatedUsing= OnRep_MaxStrengh)
+	UPROPERTY(BlueprintReadOnly, Category = "Combat Attribute", ReplicatedUsing= OnRep_MaxStrength)
 	FGameplayAttributeData MaxStrength;
 	ATTRIBUTE_ACCESSORS_BASIC(UEnhancedCombatAttributesSet, MaxStrength)
 	

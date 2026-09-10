@@ -10,6 +10,7 @@
 #include  "States/HitDirections.h"
 #include "CharacterBase.generated.h"
 
+class UEnhancedCombatAttributesSet;
 class UGameplayEffect;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHitReactDelegate, EHitReactDirection, Direction); 
 
@@ -28,8 +29,6 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Character", meta = (ToolTip = "This will be used to bind a delegate within the animation blueprint on how we should handle hit reactions. We don't really need to use this if we dont have hit reacts, but this will fire on all damage events either way"))
 	FCharacterHitReactDelegate CharacterHitReactDelegate;
-	
-
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
@@ -68,6 +67,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS")
 	TWeakObjectPtr<UEnhancedAttributeSet> AttributeSet; 
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS")
+	TWeakObjectPtr<UEnhancedCombatAttributesSet> CombatAttributeSet;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input System|Abilities", meta = (ToolTip = "This is a data asset that contains all the default abilities that the character will have.\nIf we have a melee attack by default, we would assign it here in this data asset along with "))
 	TObjectPtr<UEnhancedAbilitySet> AbilitySet; 

@@ -41,6 +41,9 @@ private:
 	UPROPERTY()
 	UEnhancedAbilitySystemComponent* HardRefASC;
 	
+	UPROPERTY()
+	UEnhancedCombatAttributesSet* HardRefCombatAttributeSet; 
+	
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UFloatingHealthComponent> FloatingHealthComponentClass;
 	

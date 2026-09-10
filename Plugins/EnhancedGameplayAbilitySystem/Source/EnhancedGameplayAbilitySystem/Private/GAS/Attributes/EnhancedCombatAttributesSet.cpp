@@ -27,9 +27,18 @@ void UEnhancedCombatAttributesSet::PreAttributeChange(const FGameplayAttribute& 
 	}  
 }
 
+// same idea as before, but we aren't working with a complex gameplay effect so we can 
 void UEnhancedCombatAttributesSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
 {
 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+	if (Attribute == GetStrengthAttribute())
+	{
+		NewValue = FMath::RoundToInt32(FMath::Clamp(NewValue,  1.0f, GetMaxStrength()));
+	}
+	else if (Attribute == GetDefenceAttribute())
+	{
+		NewValue = FMath::RoundToInt32(FMath::Clamp(NewValue,  1.0f, GetMaxDefence()));
+	}
 }
 
 void UEnhancedCombatAttributesSet::OnRep_Strength(const FGameplayAttributeData& OldData)

@@ -10,6 +10,7 @@
 
 class UEnhancedAbilitySystemComponent;
 class UEnhancedAttributeSet;
+class UEnhancedCombatAttributesSet;
 struct FOnAttributeChangeData; // why this needs to be forward declared now, I have no idea but the compiler bitches about it now (3rd September 2026)
 /**
  * 
@@ -24,6 +25,8 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
 	virtual UEnhancedAttributeSet* GetAttributeSet() const;
+	
+	virtual UEnhancedCombatAttributesSet* GetCombatAttributeSet() const;
 	
 	UFUNCTION(BlueprintPure)
 	float GetHealth() const;
@@ -40,6 +43,9 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<UEnhancedAttributeSet> AttributeSet;
+	
+	UPROPERTY()
+	TObjectPtr<UEnhancedCombatAttributesSet> CombatAttributeSet;
 	
 	FGameplayTag DeadTag;
 	

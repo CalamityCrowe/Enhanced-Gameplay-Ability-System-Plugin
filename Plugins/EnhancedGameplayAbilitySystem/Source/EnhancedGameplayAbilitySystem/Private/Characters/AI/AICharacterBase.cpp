@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "GAS/Attributes/EnhancedAttributeSet.h"
+#include "GAS/Attributes/EnhancedCombatAttributesSet.h"
 
 AAICharacterBase::AAICharacterBase()
 {
@@ -17,6 +18,9 @@ AAICharacterBase::AAICharacterBase()
 	
 	HardRefAttributeSet = CreateDefaultSubobject<UEnhancedAttributeSet>(TEXT("AttributeSet")); 
 	AttributeSet = HardRefAttributeSet;
+	
+	HardRefCombatAttributeSet = CreateDefaultSubobject<UEnhancedCombatAttributesSet>(TEXT("CombatAttributeSet"));
+	CombatAttributeSet = HardRefCombatAttributeSet;
 }
 
 void AAICharacterBase::BeginPlay()
