@@ -3,6 +3,7 @@
 
 #include "Player/EnhancedPlayerState.h"
 
+#include "Characters/Player/EnhancedPlayerCharacter.h"
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "GAS/Attributes/EnhancedAttributeSet.h"
 #include "GAS/Attributes/EnhancedCombatAttributesSet.h"
@@ -50,6 +51,24 @@ UEnhancedCombatAttributesSet* AEnhancedPlayerState::GetCombatAttributeSet() cons
 	return nullptr;
 }
 
+void AEnhancedPlayerState::ResetPlayerHealth()
+{
+	ASC->RemoveLooseGameplayTag(DeadTag);
+	
+	UGameplayEffect* GERespawn = NewObject<UGameplayEffect>(GetTransientPackage(), FName("Respawn"));
+	GERespawn->DurationPolicy = EGameplayEffectDurationType::Instant; 
+	
+	const int32 Index = GERespawn->Modifiers.Num(); 
+	GERespawn->Modifiers.SetNum(Index + 1); // since we are only reseting health here
+	
+	FGameplayModifierInfo& InfoHealth = GERespawn->Modifiers[Index];
+	InfoHealth.ModifierMagnitude = FScalableFloat(GetMaxHealth()); 
+	InfoHealth.ModifierOp = EGameplayModOp::Override; 
+	InfoHealth.Attribute = UEnhancedAttributeSet::GetHealthAttribute(); 
+	
+	ASC->ApplyGameplayEffectToSelf(GERespawn, GetCurrentLevel(),ASC->MakeEffectContext()); 
+}
+
 float AEnhancedPlayerState::GetHealth() const
 {
 	if (AttributeSet.Get())
@@ -68,6 +87,13 @@ float AEnhancedPlayerState::GetMaxHealth() const
 	return 0.0f;
 }
 
+float AEnhancedPlayerState::GetCurrentLevel() const
+{
+	if (AttributeSet.Get())
+		return AttributeSet->GetLevel(); 
+	return 0.0f;
+}
+
 bool AEnhancedPlayerState::IsAlive() const
 {
 	return GetHealth() > 0.0f;
@@ -78,12 +104,21 @@ void AEnhancedPlayerState::BeginPlay()
 	Super::BeginPlay(); 
 	if (ASC)
 	{
-		
+		OnHealthChangedDelegate = ASC->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::HealthChanged); 
+	}
+	
+	if (AbilitySet)
+	{
+		AbilitySet->GiveToAbilitySystem(ASC.Get(),&GrantedAbilityHandles, this); 
 	}
 }
 
 void AEnhancedPlayerState::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	for (FGameplayAbilitySpecHandle& AbilityHandle: GrantedAbilityHandles.GrantedAbilitySpecHandles)
+	{
+		ASC->ClearAbility(AbilityHandle);
+	}
 	Super::EndPlay(EndPlayReason);
 }
 
@@ -92,7 +127,9 @@ void AEnhancedPlayerState::HealthChanged(const FOnAttributeChangeData& Data)
 	float NewHealth = GetHealth();
 	if (!IsAlive() && !ASC->HasMatchingGameplayTag(DeadTag))
 	{
-		// still needs a bit of setup
-		// need to handle the player dying function
+		if (AEnhancedPlayerCharacter* Player = Cast<AEnhancedPlayerCharacter>(GetPawn()))
+		{
+			Player->Die();
+		}
 	}
 }

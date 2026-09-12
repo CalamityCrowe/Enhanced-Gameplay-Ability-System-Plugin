@@ -6,8 +6,10 @@
 #include "GameFramework/PlayerState.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagContainer.h"
+#include "GAS/EnhancedAbilitySet.h"
 #include "EnhancedPlayerState.generated.h"
 
+class UEnhancedAbilitySet;
 class UEnhancedAbilitySystemComponent;
 class UEnhancedAttributeSet;
 class UEnhancedCombatAttributesSet;
@@ -28,11 +30,16 @@ public:
 	
 	virtual UEnhancedCombatAttributesSet* GetCombatAttributeSet() const;
 	
+	virtual void ResetPlayerHealth();
+	
 	UFUNCTION(BlueprintPure)
 	float GetHealth() const;
 	
 	UFUNCTION(BlueprintPure)
 	float GetMaxHealth() const;
+
+	UFUNCTION(BlueprintPure)
+	float GetCurrentLevel() const;
 	
 	UFUNCTION(BlueprintPure)
 	bool IsAlive() const;
@@ -47,6 +54,9 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UEnhancedCombatAttributesSet> CombatAttributeSet;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "GAS")
+	TObjectPtr<UEnhancedAbilitySet> AbilitySet; 
+	
 	FGameplayTag DeadTag;
 	
 	virtual void BeginPlay() override; 
@@ -57,4 +67,6 @@ protected:
 	
 	FDelegateHandle OnHealthChangedDelegate;
 	
+	FAbilitySet_GrantedHandles GrantedAbilityHandles; 
+
 };

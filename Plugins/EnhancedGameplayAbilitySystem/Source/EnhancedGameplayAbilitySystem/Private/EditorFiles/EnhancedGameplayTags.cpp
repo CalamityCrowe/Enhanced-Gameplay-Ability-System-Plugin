@@ -37,9 +37,6 @@ void FEnhancedGameplayTags::AddAllTags(UGameplayTagsManager& Manager)
 	AddTag(Data_Damage, "Data.Damage", "Damage");
 	AddTag(Data_Heal, "Data.Heal", "Heal");
 	
-	AddTag(GameplayCue_Damage, "GameplayCue.Damage", "Damage");
-	AddTag(GameplayCue_Heal, "GameplayCue.Heal", "Heal");
-	AddTag(Temp, "GameplayCue.Shield", "Shield");
 		
 	AddTag(Temp, "Status.Buff.Shield", "Shield Status"); 
 }

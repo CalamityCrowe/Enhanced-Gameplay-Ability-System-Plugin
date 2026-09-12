@@ -7,6 +7,8 @@
 #include "GAS/EnhancedAbilitySystemComponent.h"
 #include "GAS/Attributes/EnhancedAttributeSet.h"
 #include "GAS/Attributes/EnhancedCombatAttributesSet.h"
+#include "Input/GASEnhancedInputComponent.h"
+#include "Player/EnhancedGameModeBase.h"
 #include "Player/EnhancedPlayerState.h"
 
 
@@ -15,7 +17,6 @@
 #include "Camera/CameraComponent.h"
 #include "EditorFiles/EnhancedGameplayTags.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Input/GASEnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -71,19 +72,25 @@ void AEnhancedPlayerCharacter::PossessedBy(AController* NewController)
 	AEnhancedPlayerState* PS = Cast<AEnhancedPlayerState>(GetPlayerState()); 
 	check(PS); 
 	
+
+	
 	ASC = Cast<UEnhancedAbilitySystemComponent>(PS->GetAbilitySystemComponent()); 
 	ASC->InitAbilityActorInfo(this, this); 
+	
+	// we run this only when the player respawns
+	if (ASC->HasMatchingGameplayTag(DeadTag))
+	{
+		PS->ResetPlayerHealth();
+	}
+	
 	
 	AttributeSet = PS->GetAttributeSet();  
 	CombatAttributeSet = PS->GetCombatAttributeSet();
 	
-	// in the ability set, we get all the 
-	if (AbilitySet)
-	{
-		AbilitySet->GiveToAbilitySystem(ASC.Get(),&GrantedAbilityHandles, this); 
-	}
+	// in the ability set, we get all the abilities we are granting to the player
 	
 	SendAbilitiesChangedEvent(); 
+	
 }
 
 // in this instance,
@@ -119,6 +126,14 @@ void AEnhancedPlayerCharacter::Die()
 
 void AEnhancedPlayerCharacter::FinishDying()
 {
+	if (HasAuthority())
+	{
+		if (AEnhancedGameModeBase* GM = Cast<AEnhancedGameModeBase>(GetWorld()->GetAuthGameMode()))
+		{
+			GM->PlayerDied(GetController()); 
+		}
+	}
+	
 	Super::FinishDying();
 }
 
