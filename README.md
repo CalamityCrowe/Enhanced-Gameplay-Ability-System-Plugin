@@ -14,9 +14,9 @@ This is a plugin that will have extended features of the GAS framework in Unreal
 
 ## What this plugin aims to achieve
 
-The GAS framework is a bare bones template for beginning to setup different gameplay mechanics. The idea behind this framework is to expand on that drastically so it can be used as a building block for making traditional RPG elements that we would normally find in them. This is getting documented on confluence so it can be simplified and explained here when it is finished getting written. 
+The GAS framework is a bare bones template for beginning to setup different gameplay mechanics. The idea behind this framework is to expand on that drastically so it can be used as a building block for making traditional RPG elements that we would normally find in them.
 >[!important]
->The writing of the pages is taking time, so the most important part for me right now is making sure what I put is correct and isn't blatantly wrong such as how the inputs work.
+>There is plans to have a full write up when I get a minute to do this.
 
 
 some of the features implemented are: 
